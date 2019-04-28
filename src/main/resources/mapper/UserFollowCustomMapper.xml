@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="online.reiam.share.mapper.UserFollowCustomMapper">
+
+    <select id="selectFollowIdListByUserId" resultType="java.lang.Integer">
+        SELECT follow_id
+        FROM user_follow
+        WHERE deleted = 0
+          AND follow = 1
+          AND user_id = #{userId}
+        ORDER BY modified_time DESC
+    </select>
+
+    <resultMap id="userFollowingResponseResultMap" type="online.reiam.share.response.UserFollowingResponse">
+        <result property="userId" column="user_id"/>
+        <result property="eachOther" column="each_other"/>
+        <result property="modifiedTime" column="modified_time"/>
+        <result property="nickname" column="nickname"/>
+        <result property="gender" column="gender"/>
+        <result property="profilePhoto" column="profile_photo"/>
+        <result property="website" column="website"/>
+        <result property="bio" column="bio"/>
+    </resultMap>
+
+    <resultMap id="userFollowerResponseResultMap" type="online.reiam.share.response.UserFollowerResponse">
+        <result property="userId" column="user_id"/>
+        <result property="eachOther" column="each_other"/>
+        <result property="modifiedTime" column="modified_time"/>
+        <result property="nickname" column="nickname"/>
+        <result property="gender" column="gender"/>
+        <result property="profilePhoto" column="profile_photo"/>
+        <result property="website" column="website"/>
+        <result property="bio" column="bio"/>
+    </resultMap>
+
+    <select id="selectUserFollowerListByUserId" resultMap="userFollowerResponseResultMap">
+        SELECT user_follow.user_id,
+               user_follow.each_other,
+               user_follow.modified_time,
+               user_info.nickname,
+               user_info.gender,
+               user_info.profile_photo,
+               user_info.website,
+               user_info.bio
+        FROM user_follow,
+             user_info
+        WHERE user_follow.deleted = 0
+          AND user_info.deleted = 0
+          AND user_follow.follow = 1
+          AND user_follow.user_id = user_info.user_id
+          AND user_follow.follow_id = #{userId}
+        ORDER BY user_follow.modified_time DESC
+    </select>
+
+    <select id="selectUserFollowingListByUserId" resultMap="userFollowingResponseResultMap">
+        SELECT user_follow.user_id,
+               user_follow.each_other,
+               user_follow.modified_time,
+               user_info.nickname,
+               user_info.gender,
+               user_info.profile_photo,
+               user_info.website,
+               user_info.bio
+        FROM user_follow,
+             user_info
+        WHERE user_follow.deleted = 0
+          AND user_info.deleted = 0
+          AND user_follow.follow = 1
+          AND user_follow.follow_id = user_info.user_id
+          AND user_follow.user_id = #{userId}
+        ORDER BY user_follow.modified_time DESC
+    </select>
+
+</mapper>
