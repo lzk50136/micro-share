@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="online.reiam.share.mapper.PostAtCustomMapper">
+<mapper namespace="online.reiam.share.mapper.PostAtMapper">
 
     <resultMap id="postAtResponseResultMap" type="online.reiam.share.response.PostAtResponse">
         <result property="postId" column="post_id"/>
         <association property="postResponse" column="post_id"
-                     select="online.reiam.share.mapper.PostCustomMapper.selectPostById">
+                     select="online.reiam.share.mapper.PostMapper.selectPostById">
         </association>
     </resultMap>
 

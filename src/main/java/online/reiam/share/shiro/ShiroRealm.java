@@ -2,7 +2,7 @@ package online.reiam.share.shiro;
 
 import online.reiam.share.jwt.JwtToken;
 import online.reiam.share.jwt.JwtTokenUtil;
-import online.reiam.share.service.UserCustomService;
+import online.reiam.share.service.UserService;
 import online.reiam.share.util.SpringUtil;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -63,14 +63,14 @@ public class ShiroRealm extends AuthorizingRealm {
         // 从principals中拿到Token令牌
         Integer userId = JwtTokenUtil.getUserId(principals.toString());
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        UserCustomService userCustomService = SpringUtil.getBean(UserCustomService.class);
+        UserService userService = SpringUtil.getBean(UserService.class);
         // 获取当前用户的所有角色，并且通过addRole添加到simpleAuthorizationInfo当中
-        List<String> roles = userCustomService.listRoleNameByUserId(userId);
+        List<String> roles = userService.listRoleNameByUserId(userId);
         // 这样当Shiro内部检查用户是否有某项权限时就会从SimpleAuthorizationInfo中拿取校验
         Set<String> permissions = new HashSet<>();
         for (String role : roles) {
             simpleAuthorizationInfo.addRole(role);
-            permissions.addAll(userCustomService.listPermissionNameByRoleName(role));
+            permissions.addAll(userService.listPermissionNameByRoleName(role));
         }
         simpleAuthorizationInfo.addStringPermissions(permissions);
         return simpleAuthorizationInfo;

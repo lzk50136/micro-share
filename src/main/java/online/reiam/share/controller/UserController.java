@@ -5,7 +5,6 @@ import online.reiam.share.entity.User;
 import online.reiam.share.exception.MicroShareException;
 import online.reiam.share.jwt.JwtTokenUtil;
 import online.reiam.share.request.UserRequest;
-import online.reiam.share.service.UserCustomService;
 import online.reiam.share.service.UserService;
 import online.reiam.share.util.ApiResult;
 import online.reiam.share.util.ApiResultUtil;
@@ -25,20 +24,18 @@ import static online.reiam.share.constants.Constants.*;
 @RequestMapping("/user")
 public class UserController {
     @Autowired
+    private UserService userService;
+    @Autowired
     private AsyncTask asyncTask;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-    @Autowired
-    private UserCustomService userCustomService;
-    @Autowired
-    private UserService userService;
 
     /**
      * 发送注册验证码邮件
      */
     @PostMapping(value = "/sign_up_validate", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult signUpValidate(@RequestBody @Validated(UserRequest.Validate.class) UserRequest userRequest) {
-        userCustomService.userExist(userRequest.getUsername());
+        userService.userExist(userRequest.getUsername());
         String validateCode = String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
         stringRedisTemplate.opsForValue().set(userRequest.getUsername() + REDIS_REGISTER, validateCode, 10, TimeUnit.MINUTES);
         asyncTask.sendMail(userRequest.getUsername(), "欢迎注册微分享！", "您的注册验证码为：" + validateCode + "。");
@@ -50,11 +47,11 @@ public class UserController {
      */
     @PostMapping(value = "/sign_up", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult signUp(@RequestBody @Validated(UserRequest.SignUp.class) UserRequest userRequest) {
-        userCustomService.userExist(userRequest.getUsername());
-        userCustomService.validateCode(userRequest.getCode(), stringRedisTemplate.opsForValue().get(userRequest.getUsername() + REDIS_REGISTER));
+        userService.userExist(userRequest.getUsername());
+        userService.validateCode(userRequest.getCode(), stringRedisTemplate.opsForValue().get(userRequest.getUsername() + REDIS_REGISTER));
         // 注册账号的验证码用过一次后失效
         stringRedisTemplate.delete(userRequest.getUsername() + REDIS_REGISTER);
-        userCustomService.signUp(userRequest.getUsername(), BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt()), "user");
+        userService.signUp(userRequest.getUsername(), BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt()), "user");
         return ApiResultUtil.success("操作成功。");
     }
 
@@ -63,7 +60,7 @@ public class UserController {
      */
     @PostMapping(value = "/login", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult login(@RequestBody @Validated(UserRequest.Login.class) UserRequest userRequest) {
-        User user = userCustomService.userNotExist(userRequest.getUsername());
+        User user = userService.userNotExist(userRequest.getUsername());
         if (!BCrypt.checkpw(userRequest.getPassword(), user.getPassword())) {
             throw new MicroShareException(10009, "密码错误。");
         }
@@ -80,7 +77,7 @@ public class UserController {
      */
     @PostMapping(value = "/reset_password_validate", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult resetPasswordValidate(@RequestBody @Validated(UserRequest.Validate.class) UserRequest userRequest) {
-        User user = userCustomService.userNotExist(userRequest.getUsername());
+        User user = userService.userNotExist(userRequest.getUsername());
         String validateCode = String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
         stringRedisTemplate.opsForValue().set(userRequest.getUsername() + REDIS_RESET, validateCode, 10, TimeUnit.MINUTES);
         asyncTask.sendMail(user.getUsername(), "微分享重置密码。", "您的重置验证码为：" + validateCode + "。");
@@ -92,11 +89,11 @@ public class UserController {
      */
     @PostMapping(value = "/reset_password", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult resetPassword(@RequestBody @Validated(UserRequest.ResetPassword.class) UserRequest userRequest) {
-        User user = userCustomService.userNotExist(userRequest.getUsername());
+        User user = userService.userNotExist(userRequest.getUsername());
         if (user.getDisabled()) {
             throw new MicroShareException(10010, "用户处于封停状态。");
         }
-        userCustomService.validateCode(userRequest.getCode(), stringRedisTemplate.opsForValue().get(userRequest.getUsername() + REDIS_RESET));
+        userService.validateCode(userRequest.getCode(), stringRedisTemplate.opsForValue().get(userRequest.getUsername() + REDIS_RESET));
         // 重置密码的验证码用过一次后失效
         stringRedisTemplate.delete(userRequest.getUsername() + REDIS_RESET);
         User user2 = new User();

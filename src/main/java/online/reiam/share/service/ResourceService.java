@@ -1,7 +1,11 @@
 package online.reiam.share.service;
 
-import online.reiam.share.entity.Resource;
 import com.baomidou.mybatisplus.extension.service.IService;
+import online.reiam.share.entity.Resource;
+import online.reiam.share.response.ResourceResponse;
+import org.apache.tika.mime.MimeTypeException;
+
+import java.io.IOException;
 
 /**
  * <p>
@@ -9,8 +13,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author Lzk
- * @since 2019-04-28
+ * @since 2019-04-29
  */
 public interface ResourceService extends IService<Resource> {
+
+    ResourceResponse uploadResource(byte[] bytes, Integer userId) throws IOException, MimeTypeException;
 
 }

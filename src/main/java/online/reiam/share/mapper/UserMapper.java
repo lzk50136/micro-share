@@ -1,7 +1,10 @@
 package online.reiam.share.mapper;
 
-import online.reiam.share.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import online.reiam.share.entity.User;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -9,8 +12,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author Lzk
- * @since 2019-04-28
+ * @since 2019-04-29
  */
 public interface UserMapper extends BaseMapper<User> {
+
+    List<String> selectRoleNameListByUserId(@Param("userId") Integer userId);
+
+    List<String> selectPermissionNameListByRoleName(@Param("roleName") String roleName);
 
 }

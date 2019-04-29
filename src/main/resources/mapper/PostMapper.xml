@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="online.reiam.share.mapper.PostCustomMapper">
+<mapper namespace="online.reiam.share.mapper.PostMapper">
 
     <resultMap id="postResponseResultMap" type="online.reiam.share.response.PostResponse">
         <id property="id" column="id"/>
@@ -11,11 +11,11 @@
         <result property="allowComment" column="allow_comment"/>
         <result property="modifiedTime" column="modified_time"/>
         <association property="userInfoResponse" column="user_id"
-                     select="online.reiam.share.mapper.UserInfoCustomMapper.selectUserInfoByUserId">
+                     select="online.reiam.share.mapper.UserInfoMapper.selectUserInfoByUserId">
         </association>
         <collection property="postDetailResponseList" ofType="online.reiam.share.response.PostDetailResponse"
                     column="id" javaType="java.util.ArrayList"
-                    select="online.reiam.share.mapper.PostDetailCustomMapper.selectPostDetailListByUserPostId">
+                    select="online.reiam.share.mapper.PostDetailMapper.selectPostDetailListByUserPostId">
         </collection>
     </resultMap>
 

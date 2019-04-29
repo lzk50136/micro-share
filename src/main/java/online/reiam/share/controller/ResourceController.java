@@ -4,9 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import online.reiam.share.entity.ResourceDetail;
 import online.reiam.share.exception.MicroShareException;
 import online.reiam.share.jwt.JwtTokenUtil;
-import online.reiam.share.service.ResourceCustomService;
-import online.reiam.share.service.ResourceDetailCustomService;
 import online.reiam.share.service.ResourceDetailService;
+import online.reiam.share.service.ResourceService;
 import online.reiam.share.util.ApiResult;
 import online.reiam.share.util.ApiResultUtil;
 import org.apache.tika.mime.MimeTypeException;
@@ -24,9 +23,7 @@ import static online.reiam.share.constants.Constants.APPLICATION_JSON;
 @RequestMapping("/resource")
 public class ResourceController {
     @Autowired
-    private ResourceCustomService resourceCustomService;
-    @Autowired
-    private ResourceDetailCustomService resourceDetailCustomService;
+    private ResourceService resourceService;
     @Autowired
     private ResourceDetailService resourceDetailService;
 
@@ -37,7 +34,7 @@ public class ResourceController {
     @ResponseBody
     public ApiResult uploadResource(@RequestParam("file") MultipartFile multipartFile, @RequestHeader("Authorization") String authorization) throws IOException, MimeTypeException {
         byte[] bytes = multipartFile.getBytes();
-        return ApiResultUtil.success(resourceCustomService.uploadResource(bytes, JwtTokenUtil.getUserId(authorization)));
+        return ApiResultUtil.success(resourceService.uploadResource(bytes, JwtTokenUtil.getUserId(authorization)));
     }
 
     /**
@@ -47,7 +44,7 @@ public class ResourceController {
     @ResponseBody
     public ApiResult uploadProfilePhoto(@RequestParam("file") MultipartFile multipartFile, @RequestHeader("Authorization") String authorization) throws IOException, MimeTypeException {
         byte[] bytes = multipartFile.getBytes();
-        return ApiResultUtil.success(resourceDetailCustomService.uploadProfilePhoto(bytes, JwtTokenUtil.getUserId(authorization)));
+        return ApiResultUtil.success(resourceDetailService.uploadProfilePhoto(bytes, JwtTokenUtil.getUserId(authorization)));
     }
 
     /**
