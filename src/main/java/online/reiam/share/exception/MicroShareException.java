@@ -11,10 +11,6 @@ public class MicroShareException extends RuntimeException {
         this.code = code;
     }
 
-    public MicroShareException(String message) {
-        super(message);
-    }
-
     public Integer getCode() {
         return code;
     }

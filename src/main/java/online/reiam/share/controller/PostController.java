@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import static online.reiam.share.constants.Constants.APPLICATION_JSON;
 
 @RestController
-@RequestMapping("/user_post")
-public class UserPostController {
+@RequestMapping("/post")
+public class PostController {
     @Autowired
     private PostService postService;
     @Autowired

@@ -15,7 +15,7 @@
         </association>
         <collection property="postDetailResponseList" ofType="online.reiam.share.response.PostDetailResponse"
                     column="id" javaType="java.util.ArrayList"
-                    select="online.reiam.share.mapper.PostDetailMapper.selectPostDetailListByUserPostId">
+                    select="online.reiam.share.mapper.PostDetailMapper.selectPostDetailListByPostId">
         </collection>
     </resultMap>
 
