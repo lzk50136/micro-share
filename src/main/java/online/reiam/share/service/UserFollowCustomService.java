@@ -1,17 +1,19 @@
 package online.reiam.share.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import online.reiam.share.entity.UserInfo;
+import online.reiam.share.entity.UserFollow;
 import online.reiam.share.request.UserFollowRequest;
 import online.reiam.share.response.UserFollowerResponse;
 import online.reiam.share.response.UserFollowingResponse;
 
 public interface UserFollowCustomService {
 
-    void follow(Integer userId, UserInfo userInfo, UserFollowRequest userFollowRequest);
+    UserFollow getFollow(Integer userId, Integer followId);
 
-    IPage<UserFollowerResponse> findUserFollowerListByUserId(UserFollowRequest userFollowRequest, Integer userId);
+    void follow(Integer userId, Integer followId, UserFollowRequest userFollowRequest);
 
-    IPage<UserFollowingResponse> findUserFollowingListByUserId(UserFollowRequest userFollowRequest, Integer userId);
+    IPage<UserFollowerResponse> listUserFollowerByUserId(UserFollowRequest userFollowRequest, Integer userId);
+
+    IPage<UserFollowingResponse> listUserFollowingByUserId(UserFollowRequest userFollowRequest, Integer userId);
 
 }

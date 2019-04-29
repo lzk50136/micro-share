@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="online.reiam.share.mapper.PostCustomMapper">
+
+    <resultMap id="postResponseResultMap" type="online.reiam.share.response.PostResponse">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="title" column="title"/>
+        <result property="likesNum" column="likes_num"/>
+        <result property="commentNum" column="comment_num"/>
+        <result property="allowComment" column="allow_comment"/>
+        <result property="modifiedTime" column="modified_time"/>
+        <association property="userInfoResponse" column="user_id"
+                     select="online.reiam.share.mapper.UserInfoCustomMapper.selectUserInfoByUserId">
+        </association>
+        <collection property="postDetailResponseList" ofType="online.reiam.share.response.PostDetailResponse"
+                    column="id" javaType="java.util.ArrayList"
+                    select="online.reiam.share.mapper.PostDetailCustomMapper.selectPostDetailListByUserPostId">
+        </collection>
+    </resultMap>
+
+    <select id="selectPostById" resultMap="postResponseResultMap">
+        SELECT id, user_id, title, likes_num, comment_num, allow_comment, modified_time
+        FROM post
+        WHERE deleted = 0
+          AND id = #{id}
+    </select>
+
+    <select id="selectPostListByIds" resultMap="postResponseResultMap">
+        SELECT id, user_id, title, likes_num, comment_num, allow_comment, modified_time
+        FROM post
+        WHERE deleted = 0
+        AND id = IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectPostListByUserId" resultMap="postResponseResultMap">
+        SELECT id, user_id, title, likes_num, comment_num, allow_comment, modified_time
+        FROM post
+        WHERE deleted = 0
+          AND user_id = #{userId}
+        ORDER BY modified_time DESC
+    </select>
+
+    <select id="selectPostListByTopicId" resultMap="postResponseResultMap">
+        SELECT post.id,
+               post.user_id,
+               post.title,
+               post.likes_num,
+               post.comment_num,
+               post.allow_comment,
+               post.modified_time
+        FROM post,
+             topic_post
+        WHERE post.deleted = 0
+          AND topic_post.deleted = 0
+          AND post.id = topic_post.post_id
+          AND topic_post.topic_id = #{topicId}
+        ORDER BY topic_post.modified_time DESC
+    </select>
+
+    <select id="selectPostListByFollowId" resultMap="postResponseResultMap">
+        SELECT id, user_id, title, likes_num, comment_num, allow_comment, modified_time
+        FROM post
+        WHERE deleted = 0
+        AND user_id IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND modified_time BETWEEN #{startTime} AND #{endTime}
+        ORDER BY modified_time DESC
+    </select>
+
+</mapper>

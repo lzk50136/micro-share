@@ -1,6 +1,5 @@
 package online.reiam.share.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import online.reiam.share.component.AsyncTask;
 import online.reiam.share.entity.User;
 import online.reiam.share.exception.MicroShareException;
@@ -39,10 +38,7 @@ public class UserController {
      */
     @PostMapping(value = "/sign_up_validate", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult signUpValidate(@RequestBody @Validated(UserRequest.Validate.class) UserRequest userRequest) {
-        User user = userService.getOne(new QueryWrapper<User>().lambda().eq(User::getUsername, userRequest.getUsername()));
-        if (user != null) {
-            throw new MicroShareException(10006, "用户已存在。");
-        }
+        userCustomService.userExist(userRequest.getUsername());
         String validateCode = String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
         stringRedisTemplate.opsForValue().set(userRequest.getUsername() + REDIS_REGISTER, validateCode, 10, TimeUnit.MINUTES);
         asyncTask.sendMail(userRequest.getUsername(), "欢迎注册微分享！", "您的注册验证码为：" + validateCode + "。");
@@ -53,14 +49,9 @@ public class UserController {
      * 注册
      */
     @PostMapping(value = "/sign_up", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
-    public ApiResult signUp(@RequestBody @Validated(UserRequest.Register.class) UserRequest userRequest) {
-        User user = userService.getOne(new QueryWrapper<User>().lambda().eq(User::getUsername, userRequest.getUsername()));
-        if (user != null) {
-            throw new MicroShareException(10006, "用户已存在。");
-        }
-        if (!userRequest.getCode().equals(stringRedisTemplate.opsForValue().get(userRequest.getUsername() + REDIS_REGISTER))) {
-            throw new MicroShareException(10007, "验证码不正确。");
-        }
+    public ApiResult signUp(@RequestBody @Validated(UserRequest.SignUp.class) UserRequest userRequest) {
+        userCustomService.userExist(userRequest.getUsername());
+        userCustomService.validateCode(userRequest.getCode(), stringRedisTemplate.opsForValue().get(userRequest.getUsername() + REDIS_REGISTER));
         // 注册账号的验证码用过一次后失效
         stringRedisTemplate.delete(userRequest.getUsername() + REDIS_REGISTER);
         userCustomService.signUp(userRequest.getUsername(), BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt()), "user");
@@ -72,10 +63,7 @@ public class UserController {
      */
     @PostMapping(value = "/login", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult login(@RequestBody @Validated(UserRequest.Login.class) UserRequest userRequest) {
-        User user = userService.getOne(new QueryWrapper<User>().lambda().eq(User::getUsername, userRequest.getUsername()));
-        if (user == null) {
-            throw new MicroShareException(10008, "用户不存在。");
-        }
+        User user = userCustomService.userNotExist(userRequest.getUsername());
         if (!BCrypt.checkpw(userRequest.getPassword(), user.getPassword())) {
             throw new MicroShareException(10009, "密码错误。");
         }
@@ -92,13 +80,10 @@ public class UserController {
      */
     @PostMapping(value = "/reset_password_validate", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult resetPasswordValidate(@RequestBody @Validated(UserRequest.Validate.class) UserRequest userRequest) {
-        User user = userService.getOne(new QueryWrapper<User>().lambda().eq(User::getUsername, userRequest.getUsername()));
-        if (user == null) {
-            throw new MicroShareException(10008, "用户不存在。");
-        }
+        User user = userCustomService.userNotExist(userRequest.getUsername());
         String validateCode = String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
         stringRedisTemplate.opsForValue().set(userRequest.getUsername() + REDIS_RESET, validateCode, 10, TimeUnit.MINUTES);
-        asyncTask.sendMail(userRequest.getUsername(), "微分享重置密码。", "您的重置验证码为：" + validateCode + "。");
+        asyncTask.sendMail(user.getUsername(), "微分享重置密码。", "您的重置验证码为：" + validateCode + "。");
         return ApiResultUtil.success("操作成功。");
     }
 
@@ -107,16 +92,11 @@ public class UserController {
      */
     @PostMapping(value = "/reset_password", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult resetPassword(@RequestBody @Validated(UserRequest.ResetPassword.class) UserRequest userRequest) {
-        User user = userService.getOne(new QueryWrapper<User>().lambda().eq(User::getUsername, userRequest.getUsername()));
-        if (user == null) {
-            throw new MicroShareException(10008, "用户不存在。");
-        }
+        User user = userCustomService.userNotExist(userRequest.getUsername());
         if (user.getDisabled()) {
             throw new MicroShareException(10010, "用户处于封停状态。");
         }
-        if (!userRequest.getCode().equals(stringRedisTemplate.opsForValue().get(userRequest.getUsername() + REDIS_RESET))) {
-            throw new MicroShareException(10007, "验证码不正确。");
-        }
+        userCustomService.validateCode(userRequest.getCode(), stringRedisTemplate.opsForValue().get(userRequest.getUsername() + REDIS_RESET));
         // 重置密码的验证码用过一次后失效
         stringRedisTemplate.delete(userRequest.getUsername() + REDIS_RESET);
         User user2 = new User();
@@ -124,12 +104,12 @@ public class UserController {
                 .setPassword(BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt()))
                 .setVersion(user.getVersion())
                 .setModifiedTime(LocalDateTime.now());
-        if (!userService.updateById(user2)) {
-            throw new MicroShareException(10001, "操作失败。");
+        if (userService.updateById(user2)) {
+            // 重置成功后使原来的登录token失效
+            stringRedisTemplate.delete(user.getId() + REDIS_TOKEN);
+            return ApiResultUtil.success("操作成功。");
         }
-        // 重置成功后使原来的登录token失效
-        stringRedisTemplate.delete(user.getId() + REDIS_TOKEN);
-        return ApiResultUtil.success("操作成功。");
+        throw new MicroShareException(10001, "操作失败。");
     }
 
     /**

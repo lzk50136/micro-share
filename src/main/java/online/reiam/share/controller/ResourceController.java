@@ -1,19 +1,15 @@
 package online.reiam.share.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import online.reiam.share.entity.Resource;
 import online.reiam.share.entity.ResourceDetail;
 import online.reiam.share.exception.MicroShareException;
 import online.reiam.share.jwt.JwtTokenUtil;
-import online.reiam.share.response.ResourceResponse;
 import online.reiam.share.service.ResourceCustomService;
 import online.reiam.share.service.ResourceDetailCustomService;
 import online.reiam.share.service.ResourceDetailService;
 import online.reiam.share.util.ApiResult;
 import online.reiam.share.util.ApiResultUtil;
-import online.reiam.share.util.ImageUtil;
 import org.apache.tika.mime.MimeTypeException;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -40,14 +36,8 @@ public class ResourceController {
     @PostMapping(value = "/upload_resource", produces = APPLICATION_JSON)
     @ResponseBody
     public ApiResult uploadResource(@RequestParam("file") MultipartFile multipartFile, @RequestHeader("Authorization") String authorization) throws IOException, MimeTypeException {
-        if (!ImageUtil.isImage(multipartFile.getInputStream())) {
-            throw new MicroShareException(10019, "图片格式有误。");
-        }
         byte[] bytes = multipartFile.getBytes();
-        Resource resource = resourceCustomService.uploadResource(bytes, JwtTokenUtil.getUserId(authorization));
-        ResourceResponse resourceResponse = new ResourceResponse();
-        BeanUtils.copyProperties(resource, resourceResponse);
-        return ApiResultUtil.success(resourceResponse);
+        return ApiResultUtil.success(resourceCustomService.uploadResource(bytes, JwtTokenUtil.getUserId(authorization)));
     }
 
     /**
@@ -56,22 +46,16 @@ public class ResourceController {
     @PostMapping(value = "/upload_profile_photo", produces = APPLICATION_JSON)
     @ResponseBody
     public ApiResult uploadProfilePhoto(@RequestParam("file") MultipartFile multipartFile, @RequestHeader("Authorization") String authorization) throws IOException, MimeTypeException {
-        if (!ImageUtil.isImage(multipartFile.getInputStream())) {
-            throw new MicroShareException(10019, "图片格式有误。");
-        }
         byte[] bytes = multipartFile.getBytes();
-        ResourceDetail resourceDetail = resourceDetailCustomService.uploadProfilePhoto(bytes, JwtTokenUtil.getUserId(authorization));
-        return ApiResultUtil.success(resourceDetail.getName());
+        return ApiResultUtil.success(resourceDetailCustomService.uploadProfilePhoto(bytes, JwtTokenUtil.getUserId(authorization)));
     }
 
     /**
      * 获取图片
      */
-    @GetMapping(value = "/access")
-    public void access(@RequestParam("name") String name, HttpServletResponse response) {
-        QueryWrapper<ResourceDetail> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(ResourceDetail::getName, name);
-        ResourceDetail resourceDetail = resourceDetailService.getOne(queryWrapper);
+    @GetMapping(value = "/download_resource")
+    public void downloadResource(@RequestParam("name") String name, HttpServletResponse response) {
+        ResourceDetail resourceDetail = resourceDetailService.getOne(new QueryWrapper<ResourceDetail>().lambda().eq(ResourceDetail::getName, name));
         if (resourceDetail == null) {
             throw new MicroShareException(10020, "资源不存在。");
         } else {

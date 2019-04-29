@@ -7,14 +7,16 @@ import online.reiam.share.entity.Resource;
 import online.reiam.share.entity.ResourceDetail;
 import online.reiam.share.entity.UserInfo;
 import online.reiam.share.exception.MicroShareException;
-import online.reiam.share.mapper.ResourceDetailMapper;
-import online.reiam.share.mapper.ResourceMapper;
-import online.reiam.share.mapper.UserInfoMapper;
+import online.reiam.share.response.ResourceResponse;
 import online.reiam.share.service.ResourceCustomService;
+import online.reiam.share.service.ResourceDetailService;
+import online.reiam.share.service.ResourceService;
+import online.reiam.share.service.UserInfoService;
 import online.reiam.share.util.FileUtil;
 import online.reiam.share.util.ImageUtil;
 import online.reiam.share.util.StringUtil;
 import org.apache.tika.mime.MimeTypeException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,18 +39,21 @@ import static online.reiam.share.constants.Constants.RESOURCE_PATH;
 @Service
 public class ResourceCustomServiceImpl implements ResourceCustomService {
     @Autowired
-    private ResourceDetailMapper resourceDetailMapper;
+    private ResourceDetailService resourceDetailService;
     @Autowired
-    private ResourceMapper resourceMapper;
+    private ResourceService resourceService;
     @Autowired
-    private UserInfoMapper userInfoMapper;
+    private UserInfoService userInfoService;
 
     /**
      * 资源文件上传
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Resource uploadResource(byte[] bytes, Integer userId) throws IOException, MimeTypeException {
+    public ResourceResponse uploadResource(byte[] bytes, Integer userId) throws IOException, MimeTypeException {
+        if (!ImageUtil.isImage(new ByteArrayInputStream(bytes))) {
+            throw new MicroShareException(10019, "图片格式有误。");
+        }
         // 原始文件写入硬盘
         String name = StringUtil.getUUID();
         String type = FileUtil.getFileType(bytes);
@@ -66,12 +71,12 @@ public class ResourceCustomServiceImpl implements ResourceCustomService {
                 .setVersion(0)
                 .setCreateTime(LocalDateTime.now())
                 .setModifiedTime(LocalDateTime.now());
-        resourceDetailMapper.insert(resourceDetail);
+        resourceDetailService.save(resourceDetail);
 
         File file = new File(RESOURCE_PATH + originalName);
 
         // 文字转水印图片
-        UserInfo userInfo = userInfoMapper.selectOne(new QueryWrapper<UserInfo>().lambda().eq(UserInfo::getUserId, userId));
+        UserInfo userInfo = userInfoService.getOne(new QueryWrapper<UserInfo>().lambda().eq(UserInfo::getUserId, userId));
         ByteArrayInputStream byteArrayInputStream = ImageUtil.createImage(userInfo.getNickname());
         if (byteArrayInputStream == null) {
             throw new MicroShareException(10021, "文字转换失败！");
@@ -101,7 +106,7 @@ public class ResourceCustomServiceImpl implements ResourceCustomService {
                 .setVersion(0)
                 .setCreateTime(LocalDateTime.now())
                 .setModifiedTime(LocalDateTime.now());
-        resourceDetailMapper.insert(resourceDetail2);
+        resourceDetailService.save(resourceDetail2);
 
         // 生成缩略图文件，写入硬盘
         String name3 = StringUtil.getUUID();
@@ -122,7 +127,7 @@ public class ResourceCustomServiceImpl implements ResourceCustomService {
                 .setVersion(0)
                 .setCreateTime(LocalDateTime.now())
                 .setModifiedTime(LocalDateTime.now());
-        resourceDetailMapper.insert(resourceDetail3);
+        resourceDetailService.save(resourceDetail3);
 
         // 汇总文件信息保存到数据库
         Resource resource = new Resource();
@@ -133,9 +138,11 @@ public class ResourceCustomServiceImpl implements ResourceCustomService {
                 .setVersion(0)
                 .setCreateTime(LocalDateTime.now())
                 .setModifiedTime(LocalDateTime.now());
-        resourceMapper.insert(resource);
+        resourceService.save(resource);
 
-        return resource;
+        ResourceResponse resourceResponse = new ResourceResponse();
+        BeanUtils.copyProperties(resource, resourceResponse);
+        return resourceResponse;
     }
 
 }

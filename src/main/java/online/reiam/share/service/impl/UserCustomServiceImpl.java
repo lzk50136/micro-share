@@ -5,33 +5,35 @@ import online.reiam.share.entity.Role;
 import online.reiam.share.entity.User;
 import online.reiam.share.entity.UserInfo;
 import online.reiam.share.entity.UserRole;
-import online.reiam.share.mapper.*;
-import online.reiam.share.service.UserCustomService;
+import online.reiam.share.exception.MicroShareException;
+import online.reiam.share.mapper.UserCustomMapper;
+import online.reiam.share.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class UserCustomServiceImpl implements UserCustomService {
     @Autowired
-    private RoleMapper roleMapper;
+    private RoleService roleService;
     @Autowired
-    private UserMapper userMapper;
-    @Autowired
+    private UserService userService;
+    @Resource
     private UserCustomMapper userCustomMapper;
     @Autowired
-    private UserInfoMapper userInfoMapper;
+    private UserInfoService userInfoService;
     @Autowired
-    private UserRoleMapper userRoleMapper;
+    private UserRoleService userRoleService;
 
     /**
      * 获取角色列表
      */
     @Override
-    public List<String> findRoleNameListByUserId(Integer userId) {
+    public List<String> listRoleNameByUserId(Integer userId) {
         return userCustomMapper.selectRoleNameListByUserId(userId);
     }
 
@@ -39,8 +41,41 @@ public class UserCustomServiceImpl implements UserCustomService {
      * 获取权限列表
      */
     @Override
-    public List<String> findPermissionNameListByRoleName(String roleName) {
+    public List<String> listPermissionNameByRoleName(String roleName) {
         return userCustomMapper.selectPermissionNameListByRoleName(roleName);
+    }
+
+    /**
+     * 用户已存在
+     */
+    @Override
+    public void userExist(String username) {
+        User user = userService.getOne(new QueryWrapper<User>().lambda().eq(User::getUsername, username));
+        if (user != null) {
+            throw new MicroShareException(10006, "用户已存在。");
+        }
+    }
+
+    /**
+     * 用户不存在
+     */
+    @Override
+    public User userNotExist(String username) {
+        User user = userService.getOne(new QueryWrapper<User>().lambda().eq(User::getUsername, username));
+        if (user == null) {
+            throw new MicroShareException(10008, "用户不存在。");
+        }
+        return user;
+    }
+
+    /**
+     * 判断验证码
+     */
+    @Override
+    public void validateCode(String code1, String code2) {
+        if (!code1.equals(code2)) {
+            throw new MicroShareException(10007, "验证码不正确。");
+        }
     }
 
     /**
@@ -58,11 +93,11 @@ public class UserCustomServiceImpl implements UserCustomService {
                 .setVersion(0)
                 .setCreateTime(LocalDateTime.now())
                 .setModifiedTime(LocalDateTime.now());
-        userMapper.insert(user);
+        userService.save(user);
         // 2、插入用户信息表
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(user.getId())
-                .setNickname("用户ID" + user.getId())
+                .setNickname("用户" + user.getId())
                 .setGender(null)
                 .setProfilePhoto(null)
                 .setWebsite(null)
@@ -73,9 +108,9 @@ public class UserCustomServiceImpl implements UserCustomService {
                 .setVersion(0)
                 .setCreateTime(LocalDateTime.now())
                 .setModifiedTime(LocalDateTime.now());
-        userInfoMapper.insert(userInfo);
+        userInfoService.save(userInfo);
         // 3、插入用户权限表
-        Role role = roleMapper.selectOne(new QueryWrapper<Role>().lambda().eq(Role::getName, roleName));
+        Role role = roleService.getOne(new QueryWrapper<Role>().lambda().eq(Role::getName, roleName));
         UserRole userRole = new UserRole();
         userRole.setUserId(user.getId())
                 .setRoleId(role.getId())
@@ -83,7 +118,7 @@ public class UserCustomServiceImpl implements UserCustomService {
                 .setVersion(0)
                 .setCreateTime(LocalDateTime.now())
                 .setModifiedTime(LocalDateTime.now());
-        userRoleMapper.insert(userRole);
+        userRoleService.save(userRole);
     }
 
 }

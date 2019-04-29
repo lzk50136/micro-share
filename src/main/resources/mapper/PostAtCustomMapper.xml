@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="online.reiam.share.mapper.PostAtCustomMapper">
+
+    <resultMap id="postAtResponseResultMap" type="online.reiam.share.response.PostAtResponse">
+        <result property="postId" column="post_id"/>
+        <association property="postResponse" column="post_id"
+                     select="online.reiam.share.mapper.PostCustomMapper.selectPostById">
+        </association>
+    </resultMap>
+
+    <select id="selectPostListByUserId" resultMap="postAtResponseResultMap">
+        SELECT post_id
+        FROM post_at
+        WHERE deleted = 0
+          AND user_id = #{userId}
+        ORDER BY modified_time DESC
+    </select>
+
+</mapper>

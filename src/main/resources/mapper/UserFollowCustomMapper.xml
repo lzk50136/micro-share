@@ -11,19 +11,7 @@
         ORDER BY modified_time DESC
     </select>
 
-    <resultMap id="userFollowingResponseResultMap" type="online.reiam.share.response.UserFollowingResponse">
-        <result property="userId" column="user_id"/>
-        <result property="eachOther" column="each_other"/>
-        <result property="modifiedTime" column="modified_time"/>
-        <result property="nickname" column="nickname"/>
-        <result property="gender" column="gender"/>
-        <result property="profilePhoto" column="profile_photo"/>
-        <result property="website" column="website"/>
-        <result property="bio" column="bio"/>
-    </resultMap>
-
     <resultMap id="userFollowerResponseResultMap" type="online.reiam.share.response.UserFollowerResponse">
-        <result property="userId" column="user_id"/>
         <result property="eachOther" column="each_other"/>
         <result property="modifiedTime" column="modified_time"/>
         <result property="nickname" column="nickname"/>
@@ -51,6 +39,16 @@
           AND user_follow.follow_id = #{userId}
         ORDER BY user_follow.modified_time DESC
     </select>
+
+    <resultMap id="userFollowingResponseResultMap" type="online.reiam.share.response.UserFollowingResponse">
+        <result property="eachOther" column="each_other"/>
+        <result property="modifiedTime" column="modified_time"/>
+        <result property="nickname" column="nickname"/>
+        <result property="gender" column="gender"/>
+        <result property="profilePhoto" column="profile_photo"/>
+        <result property="website" column="website"/>
+        <result property="bio" column="bio"/>
+    </resultMap>
 
     <select id="selectUserFollowingListByUserId" resultMap="userFollowingResponseResultMap">
         SELECT user_follow.user_id,

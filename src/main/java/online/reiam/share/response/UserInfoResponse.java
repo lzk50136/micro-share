@@ -14,11 +14,6 @@ public class UserInfoResponse implements Serializable {
     private static final long serialVersionUID = 852139331679962257L;
 
     /**
-     * 自增id
-     */
-    private Integer id;
-
-    /**
      * 昵称
      */
     private String nickname;

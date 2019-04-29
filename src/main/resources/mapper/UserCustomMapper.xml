@@ -5,25 +5,21 @@
     <select id="selectRoleNameListByUserId" resultType="java.lang.String">
         SELECT name
         FROM role
-        WHERE deleted = 0
-          AND id IN (SELECT role_id
-                     FROM user_role
-                     WHERE deleted = 0
-                       AND user_id = #{userId})
-
+                 LEFT JOIN user_role ON role.id = user_role.role_id
+        WHERE role.deleted = 0
+          AND user_role.deleted = 0
+          AND user_role.user_id = #{userId}
     </select>
 
     <select id="selectPermissionNameListByRoleName" resultType="java.lang.String">
-        SELECT name
+        SELECT permission.name
         FROM permission
-        WHERE deleted = 0
-          AND id IN (SELECT permission_id
-                     FROM role_permission
-                     WHERE deleted = 0
-                       AND role_id = (SELECT id
-                                      FROM role
-                                      WHERE deleted = 0
-                                        AND name = #{roleName}))
+                 LEFT JOIN role_permission ON permission.id = role_permission.permission_id
+                 LEFT JOIN role ON role_permission.role_id = role.id
+        WHERE permission.deleted = 0
+          AND role_permission.deleted = 0
+          AND role.deleted = 0
+          AND role.name = #{roleName}
     </select>
 
 </mapper>

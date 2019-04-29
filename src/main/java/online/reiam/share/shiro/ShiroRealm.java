@@ -65,12 +65,12 @@ public class ShiroRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         UserCustomService userCustomService = SpringUtil.getBean(UserCustomService.class);
         // 获取当前用户的所有角色，并且通过addRole添加到simpleAuthorizationInfo当中
-        List<String> roles = userCustomService.findRoleNameListByUserId(userId);
+        List<String> roles = userCustomService.listRoleNameByUserId(userId);
         // 这样当Shiro内部检查用户是否有某项权限时就会从SimpleAuthorizationInfo中拿取校验
         Set<String> permissions = new HashSet<>();
         for (String role : roles) {
             simpleAuthorizationInfo.addRole(role);
-            permissions.addAll(userCustomService.findPermissionNameListByRoleName(role));
+            permissions.addAll(userCustomService.listPermissionNameByRoleName(role));
         }
         simpleAuthorizationInfo.addStringPermissions(permissions);
         return simpleAuthorizationInfo;

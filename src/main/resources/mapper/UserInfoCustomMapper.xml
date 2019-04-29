@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="online.reiam.share.mapper.UserInfoCustomMapper">
+
+    <resultMap id="userInfoResponseResultMap" type="online.reiam.share.response.UserInfoResponse">
+        <id property="id" column="id"/>
+        <result property="nickname" column="nickname"/>
+        <result property="gender" column="gender"/>
+        <result property="profilePhoto" column="profile_photo"/>
+        <result property="website" column="website"/>
+        <result property="bio" column="bio"/>
+        <result property="following" column="following"/>
+        <result property="follower" column="follower"/>
+    </resultMap>
+
+    <select id="selectUserInfoByUserId" resultMap="userInfoResponseResultMap">
+        select id,
+               nickname,
+               gender,
+               profile_photo,
+               website,
+               bio,
+               following,
+               follower
+        from user_info
+        where deleted = 0
+          AND user_id = #{userId}
+    </select>
+
+</mapper>

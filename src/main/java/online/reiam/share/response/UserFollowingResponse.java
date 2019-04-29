@@ -15,11 +15,6 @@ public class UserFollowingResponse implements Serializable {
     private static final long serialVersionUID = -8022194517343884283L;
 
     /**
-     * 关注者id
-     */
-    private Integer userId;
-
-    /**
      * 是否互粉
      */
     private Boolean eachOther;
