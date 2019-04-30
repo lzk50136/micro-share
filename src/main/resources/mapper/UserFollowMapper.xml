@@ -22,8 +22,7 @@
     </resultMap>
 
     <select id="selectUserFollowerListByUserId" resultMap="userFollowerResponseResultMap">
-        SELECT user_follow.user_id,
-               user_follow.each_other,
+        SELECT user_follow.each_other,
                user_follow.modified_time,
                user_info.nickname,
                user_info.gender,
@@ -51,8 +50,7 @@
     </resultMap>
 
     <select id="selectUserFollowingListByUserId" resultMap="userFollowingResponseResultMap">
-        SELECT user_follow.user_id,
-               user_follow.each_other,
+        SELECT user_follow.each_other,
                user_follow.modified_time,
                user_info.nickname,
                user_info.gender,

@@ -1,9 +1,9 @@
 package online.reiam.share.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import online.reiam.share.entity.Topic;
 import online.reiam.share.mapper.TopicMapper;
 import online.reiam.share.service.TopicService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

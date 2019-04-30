@@ -1,7 +1,7 @@
 package online.reiam.share.service;
 
-import online.reiam.share.entity.PostAt;
 import com.baomidou.mybatisplus.extension.service.IService;
+import online.reiam.share.entity.AtMe;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author Lzk
- * @since 2019-04-29
+ * @since 2019-04-30
  */
-public interface PostAtService extends IService<PostAt> {
+public interface AtMeService extends IService<AtMe> {
 
 }

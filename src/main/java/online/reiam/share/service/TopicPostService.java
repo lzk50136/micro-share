@@ -1,7 +1,7 @@
 package online.reiam.share.service;
 
-import online.reiam.share.entity.TopicPost;
 import com.baomidou.mybatisplus.extension.service.IService;
+import online.reiam.share.entity.TopicPost;
 
 /**
  * <p>

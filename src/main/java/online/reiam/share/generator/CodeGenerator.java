@@ -2,22 +2,16 @@ package online.reiam.share.generator;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
-import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
-import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.querys.MySqlQuery;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CodeGenerator {
 
-    private static String[] tables = {"user"};
+    private static String[] tables = {"at_me"};
 
     public static void main(String[] args) {
         // 1. 全局配置
@@ -158,7 +152,7 @@ public class CodeGenerator {
         ;
 
         // 自定义配置
-        InjectionConfig ic = new InjectionConfig() {
+        /*InjectionConfig ic = new InjectionConfig() {
             @Override
             public void initMap() {
                 // to do nothing
@@ -179,7 +173,7 @@ public class CodeGenerator {
                 return System.getProperty("user.dir") + "/src/main/resources/mapper/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
-        ic.setFileOutConfigList(focList);
+        ic.setFileOutConfigList(focList);*/
 
         // 5. 整合配置
         AutoGenerator ag = new AutoGenerator();
@@ -187,7 +181,7 @@ public class CodeGenerator {
                 // 查看源码可知无需设置此项
                 //.setConfig()
                 // 注入自定义配置
-                .setCfg(ic)
+                //.setCfg(ic)
                 // 数据源配置
                 .setDataSource(dsc)
                 // 数据库表配置
@@ -195,7 +189,8 @@ public class CodeGenerator {
                 // 包 相关配置
                 .setPackageInfo(pc)
                 //模板 相关配置
-                .setTemplate(new TemplateConfig().setController(null).setXml(null))
+                //.setTemplate(new TemplateConfig().setController(null))
+                .setTemplate(new TemplateConfig().setController(null).setService(null).setServiceImpl(null).setMapper(null).setXml(null))
                 // 全局 相关配置
                 .setGlobalConfig(gc)
                 // Spring Boot1.5后不支持Velocity，手动设置为Freemarker

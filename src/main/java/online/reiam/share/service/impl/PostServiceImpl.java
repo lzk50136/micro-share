@@ -6,13 +6,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import online.reiam.share.entity.*;
 import online.reiam.share.exception.MicroShareException;
-import online.reiam.share.mapper.PostAtMapper;
-import online.reiam.share.mapper.PostLikesMapper;
 import online.reiam.share.mapper.PostMapper;
 import online.reiam.share.mapper.UserFollowMapper;
 import online.reiam.share.request.PostRequest;
-import online.reiam.share.response.LikesPostResponse;
-import online.reiam.share.response.PostAtResponse;
 import online.reiam.share.response.PostResponse;
 import online.reiam.share.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,17 +43,13 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Autowired
     private UserInfoService userInfoService;
     @Autowired
-    private PostAtService postAtService;
+    private AtMeService atMeService;
     @Autowired
     private TopicService topicService;
     @Autowired
     private TopicPostService topicPostService;
     @Resource
     private UserFollowMapper userFollowMapper;
-    @Resource
-    private PostAtMapper postAtMapper;
-    @Resource
-    private PostLikesMapper postLikesMapper;
 
     /**
      * 艾特正则表达式
@@ -67,6 +59,18 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
      * 话题正则表达式
      */
     private Pattern pattern2 = Pattern.compile("#(?<name>[a-zA-Z\\d_\\u4e00-\\u9fa5]{1,14})\\s+");
+
+    /**
+     * 贴子是否存在
+     */
+    @Override
+    public Post postNotExist(Integer postId) {
+        Post post = getById(postId);
+        if (post == null) {
+            throw new MicroShareException(10024, "贴子不存在。");
+        }
+        return post;
+    }
 
     /**
      * 发布新贴子
@@ -122,14 +126,15 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
             // 判断用户是否存在
             UserInfo userInfo = userInfoService.getOne(new QueryWrapper<UserInfo>().lambda().eq(UserInfo::getNickname, name));
             if (userInfo != null) {
-                PostAt postAt = new PostAt();
-                postAt.setPostId(post.getId())
+                AtMe atMe = new AtMe();
+                atMe.setTypeId(post.getId())
                         .setUserId(userInfo.getUserId())
+                        .setAtMeType(0)
                         .setDeleted(false)
                         .setVersion(0)
                         .setCreateTime(LocalDateTime.now())
                         .setModifiedTime(LocalDateTime.now());
-                postAtService.save(postAt);
+                atMeService.save(atMe);
             }
         }
         // 如果正文有#某个话题，则更新话题贴子数量
@@ -191,22 +196,10 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
      * 获取某个用户的贴子列表
      */
     @Override
-    public IPage<PostResponse> listPostByUserId(PostRequest postRequest, UserInfo userInfo) {
+    public IPage<PostResponse> listPostByUserId(PostRequest postRequest) {
+        UserInfo userInfo = userInfoService.userExist(postRequest.getNickname());
         Page<PostResponse> page = new Page<>(postRequest.getPageNum(), postRequest.getPageSize());
         return postMapper.selectPostListByUserId(page, userInfo.getUserId());
-    }
-
-    /**
-     * 获取某个话题的贴子列表
-     */
-    @Override
-    public IPage<PostResponse> listPostByTopicId(PostRequest postRequest) {
-        Topic topic = topicService.getOne(new QueryWrapper<Topic>().lambda().eq(Topic::getName, postRequest.getTopicName()));
-        if (topic == null) {
-            throw new MicroShareException(10026, "话题不存在。");
-        }
-        Page<PostResponse> page = new Page<>(postRequest.getPageNum(), postRequest.getPageSize());
-        return postMapper.selectPostListByTopicId(page, topic.getId());
     }
 
     /**
@@ -219,24 +212,6 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         // 关注列表的新贴子需要分页
         Page<PostResponse> page = new Page<>(postRequest.getPageNum(), postRequest.getPageSize());
         return postMapper.selectPostListByFollowId(page, integerList, postRequest.getStartTime(), postRequest.getEndTime());
-    }
-
-    /**
-     * 获取艾特我的贴子列表
-     */
-    @Override
-    public IPage<PostAtResponse> listPostByAtMe(PostRequest postRequest, Integer userId) {
-        Page<PostAtResponse> page = new Page<>(postRequest.getPageNum(), postRequest.getPageSize());
-        return postAtMapper.selectPostListByUserId(page, userId);
-    }
-
-    /**
-     * 获取点赞我的贴子列表
-     */
-    @Override
-    public IPage<LikesPostResponse> listPostByLikeMe(PostRequest postRequest, Integer userId) {
-        Page<LikesPostResponse> page = new Page<>(postRequest.getPageNum(), postRequest.getPageSize());
-        return postLikesMapper.selectLikesPostListByUserId(page, userId);
     }
 
 }

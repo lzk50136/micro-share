@@ -1,7 +1,7 @@
 package online.reiam.share.mapper;
 
-import online.reiam.share.entity.Topic;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import online.reiam.share.entity.Topic;
 
 /**
  * <p>

@@ -11,29 +11,33 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class PostLikesRequest implements Serializable {
+public class LikesRequest implements Serializable {
 
     private static final long serialVersionUID = -2490277950401223687L;
 
     public interface Likes {
     }
 
-    public interface ListLikesByPostId {
+    public interface ListLikesByType {
     }
 
-    @NotNull(message = "post_id不能为空。", groups = {Likes.class, ListLikesByPostId.class})
-    @JsonProperty(value = "post_id")
-    private Integer postId;
+    @NotNull(message = "type_id不能为空。", groups = {Likes.class, ListLikesByType.class})
+    @JsonProperty(value = "type_id")
+    private Integer typeId;
 
     @NotNull(message = "likes不能为空。", groups = Likes.class)
     @JsonProperty(value = "likes")
     private Boolean likes;
 
-    @NotNull(message = "page_num不能为空。", groups = ListLikesByPostId.class)
+    @NotNull(message = "likes_type不能为空。", groups = {Likes.class, ListLikesByType.class})
+    @JsonProperty(value = "likes_type")
+    private Integer likesType;
+
+    @NotNull(message = "page_num不能为空。", groups = ListLikesByType.class)
     @JsonProperty(value = "page_num")
     private Integer pageNum;
 
-    @NotNull(message = "page_size不能为空。", groups = ListLikesByPostId.class)
+    @NotNull(message = "page_size不能为空。", groups = ListLikesByType.class)
     @JsonProperty(value = "page_size")
     private Integer pageSize;
 

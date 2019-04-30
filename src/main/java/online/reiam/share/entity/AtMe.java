@@ -1,31 +1,28 @@
 package online.reiam.share.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.annotation.TableId;
-
-import java.time.LocalDateTime;
-
 import com.baomidou.mybatisplus.annotation.TableLogic;
-
-import java.io.Serializable;
-
+import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 /**
  * <p>
- * 贴子点赞表
+ * 贴子艾特表
  * </p>
  *
  * @author Lzk
- * @since 2019-04-29
+ * @since 2019-04-30
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class PostLikes implements Serializable {
+public class AtMe implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,19 +33,19 @@ public class PostLikes implements Serializable {
     private Integer id;
 
     /**
-     * 贴子id
+     * 类型对应id
      */
-    private Integer postId;
+    private Integer typeId;
 
     /**
-     * 用户id
+     * 艾特我的
      */
     private Integer userId;
 
     /**
-     * 是否点赞
+     * 艾特类型
      */
-    private Boolean likes;
+    private Integer atMeType;
 
     /**
      * 是否删除

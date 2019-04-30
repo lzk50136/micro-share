@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="online.reiam.share.mapper.LikesMapper">
+
+    <resultMap id="likesResponseResultMap" type="online.reiam.share.response.LikesResponse">
+        <result property="userId" column="user_id"/>
+        <association property="userInfoResponse" column="user_id"
+                     select="online.reiam.share.mapper.UserInfoMapper.selectUserInfoByUserId">
+        </association>
+    </resultMap>
+
+    <select id="selectUserInfoListByLikesAndType" resultMap="likesResponseResultMap">
+        SELECT likes.user_id
+        FROM likes
+        WHERE likes.deleted = 0
+          AND likes.likes = 1
+          AND likes.type_id = #{typeId}
+          AND likes.likes_type = #{likesType}
+        ORDER BY likes.modified_time DESC
+    </select>
+
+    <resultMap id="likesPostResponseResultMap" type="online.reiam.share.response.LikesPostResponse">
+        <result property="postId" column="post_id"/>
+        <association property="postResponse" column="post_id"
+                     select="online.reiam.share.mapper.PostMapper.selectPostById">
+        </association>
+    </resultMap>
+
+    <select id="selectLikesPostListByUserId" resultMap="likesPostResponseResultMap">
+        SELECT type_id
+        FROM likes
+        WHERE deleted = 0
+          AND likes = 1
+          AND likes_type = 0
+          AND user_id = #{userId}
+        ORDER BY modified_time DESC
+    </select>
+
+</mapper>

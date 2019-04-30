@@ -30,17 +30,17 @@ import java.time.LocalDateTime;
  */
 @Service
 public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFollow> implements UserFollowService {
-    @Resource
-    private UserFollowMapper userFollowMapper;
     @Autowired
     private UserInfoService userInfoService;
+    @Resource
+    private UserFollowMapper userFollowMapper;
 
     @Override
     public UserFollow getFollow(Integer userId, Integer followId) {
-        QueryWrapper<UserFollow> queryWrapper2 = new QueryWrapper<>();
-        queryWrapper2.lambda().eq(UserFollow::getUserId, userId)
+        QueryWrapper<UserFollow> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(UserFollow::getUserId, userId)
                 .eq(UserFollow::getFollowId, followId);
-        return getOne(queryWrapper2);
+        return getOne(queryWrapper);
     }
 
     /**

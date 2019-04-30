@@ -22,11 +22,7 @@ public interface PostMapper extends BaseMapper<Post> {
 
     PostResponse selectPostById(@Param("id") Integer id);
 
-    List<PostResponse> selectPostListByIds(List<Integer> list);
-
     IPage<PostResponse> selectPostListByUserId(Page page, @Param("userId") Integer userId);
-
-    IPage<PostResponse> selectPostListByTopicId(Page page, @Param("userId") Integer topicId);
 
     IPage<PostResponse> selectPostListByFollowId(Page page, List<Integer> list, LocalDateTime startTime, LocalDateTime endTime);
 

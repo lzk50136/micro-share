@@ -26,39 +26,12 @@
           AND id = #{id}
     </select>
 
-    <select id="selectPostListByIds" resultMap="postResponseResultMap">
-        SELECT id, user_id, title, likes_num, comment_num, allow_comment, modified_time
-        FROM post
-        WHERE deleted = 0
-        AND id = IN
-        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-    </select>
-
     <select id="selectPostListByUserId" resultMap="postResponseResultMap">
         SELECT id, user_id, title, likes_num, comment_num, allow_comment, modified_time
         FROM post
         WHERE deleted = 0
           AND user_id = #{userId}
         ORDER BY modified_time DESC
-    </select>
-
-    <select id="selectPostListByTopicId" resultMap="postResponseResultMap">
-        SELECT post.id,
-               post.user_id,
-               post.title,
-               post.likes_num,
-               post.comment_num,
-               post.allow_comment,
-               post.modified_time
-        FROM post,
-             topic_post
-        WHERE post.deleted = 0
-          AND topic_post.deleted = 0
-          AND post.id = topic_post.post_id
-          AND topic_post.topic_id = #{topicId}
-        ORDER BY topic_post.modified_time DESC
     </select>
 
     <select id="selectPostListByFollowId" resultMap="postResponseResultMap">

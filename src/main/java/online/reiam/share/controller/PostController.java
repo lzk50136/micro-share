@@ -1,11 +1,9 @@
 package online.reiam.share.controller;
 
-import online.reiam.share.entity.UserInfo;
 import online.reiam.share.jwt.JwtTokenUtil;
 import online.reiam.share.request.PostRequest;
 import online.reiam.share.response.PostResponse;
 import online.reiam.share.service.PostService;
-import online.reiam.share.service.UserInfoService;
 import online.reiam.share.util.ApiResult;
 import online.reiam.share.util.ApiResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +17,6 @@ import static online.reiam.share.constants.Constants.APPLICATION_JSON;
 public class PostController {
     @Autowired
     private PostService postService;
-    @Autowired
-    private UserInfoService userInfoService;
 
     /**
      * 发布新贴子
@@ -45,16 +41,7 @@ public class PostController {
      */
     @PostMapping(value = "/list_post_by_nickname", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult listPostByUserId(@RequestBody @Validated(PostRequest.ListPostByNickname.class) PostRequest postRequest) {
-        UserInfo userInfo = userInfoService.userExist(postRequest.getNickname());
-        return ApiResultUtil.success(postService.listPostByUserId(postRequest, userInfo));
-    }
-
-    /**
-     * 获取某个话题的贴子列表
-     */
-    @PostMapping(value = "/list_post_by_topic_name", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
-    public ApiResult listPostByTopicName(@RequestBody @Validated(PostRequest.ListPostByTopicName.class) PostRequest postRequest) {
-        return ApiResultUtil.success(postService.listPostByTopicId(postRequest));
+        return ApiResultUtil.success(postService.listPostByUserId(postRequest));
     }
 
     /**
@@ -63,19 +50,6 @@ public class PostController {
     @PostMapping(value = "/refresh_post_list", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult refreshPostList(@RequestBody @Validated(PostRequest.ListPostByFollowId.class) PostRequest postRequest, @RequestHeader("Authorization") String authorization) {
         return ApiResultUtil.success(postService.listPostByFollowId(JwtTokenUtil.getUserId(authorization), postRequest));
-    }
-
-    /**
-     * 获取艾特我的贴子列表
-     */
-    @PostMapping(value = "/list_post_by_at_me", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
-    public ApiResult listPostByAtMe(@RequestBody @Validated(PostRequest.ListPostByUserId.class) PostRequest postRequest, @RequestHeader("Authorization") String authorization) {
-        return ApiResultUtil.success(postService.listPostByAtMe(postRequest, JwtTokenUtil.getUserId(authorization)));
-    }
-
-    @PostMapping(value = "/list_post_by_like_me", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
-    public ApiResult listPostByLikeMe(@RequestBody @Validated(PostRequest.ListPostByUserId.class) PostRequest postRequest, @RequestHeader("Authorization") String authorization) {
-        return ApiResultUtil.success(postService.listPostByLikeMe(postRequest, JwtTokenUtil.getUserId(authorization)));
     }
 
 }

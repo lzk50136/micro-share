@@ -1,18 +1,15 @@
 package online.reiam.share.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.annotation.TableId;
-
-import java.time.LocalDateTime;
-
 import com.baomidou.mybatisplus.annotation.TableLogic;
-
-import java.io.Serializable;
-
+import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -20,7 +17,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author Lzk
- * @since 2019-04-29
+ * @since 2019-04-30
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -36,9 +33,9 @@ public class Comment implements Serializable {
     private Integer id;
 
     /**
-     * 贴子或评论id
+     * 类型对应id
      */
-    private Integer postOrComment;
+    private Integer typeId;
 
     /**
      * 用户id

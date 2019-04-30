@@ -1,31 +1,28 @@
 package online.reiam.share.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.annotation.TableId;
-
-import java.time.LocalDateTime;
-
 import com.baomidou.mybatisplus.annotation.TableLogic;
-
-import java.io.Serializable;
-
+import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 /**
  * <p>
- * 评论点赞表
+ * 贴子点赞表
  * </p>
  *
  * @author Lzk
- * @since 2019-04-29
+ * @since 2019-04-30
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class CommentLikes implements Serializable {
+public class Likes implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,9 +33,9 @@ public class CommentLikes implements Serializable {
     private Integer id;
 
     /**
-     * 评论id
+     * 贴子或评论id
      */
-    private Integer commentId;
+    private Integer typeId;
 
     /**
      * 用户id
@@ -49,6 +46,11 @@ public class CommentLikes implements Serializable {
      * 是否点赞
      */
     private Boolean likes;
+
+    /**
+     * 点赞类型
+     */
+    private Integer likesType;
 
     /**
      * 是否删除
