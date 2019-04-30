@@ -16,7 +16,7 @@ import online.reiam.share.response.PostResponse;
  */
 public interface PostService extends IService<Post> {
 
-    Post postNotExist(Integer postId);
+    Post postExist(Integer postId);
 
     PostResponse addPost(Integer userId, PostRequest postRequest);
 

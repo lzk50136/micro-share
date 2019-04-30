@@ -7,7 +7,6 @@ import online.reiam.share.entity.Comment;
 import online.reiam.share.entity.Post;
 import online.reiam.share.entity.UserInfo;
 import online.reiam.share.exception.MicroShareException;
-import online.reiam.share.mapper.AtMeMapper;
 import online.reiam.share.mapper.CommentMapper;
 import online.reiam.share.request.CommentRequest;
 import online.reiam.share.service.AtMeService;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,15 +35,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private PostService postService;
     @Autowired
     private UserInfoService userInfoService;
-    @Resource
-    private AtMeMapper atMeMapper;
     @Autowired
     private AtMeService atMeService;
 
     private Pattern pattern = Pattern.compile("@(?<name>[a-zA-Z\\d_\\u4e00-\\u9fa5]{1,14})\\s+");
 
     @Override
-    public Comment commentNotExist(Integer commentId) {
+    public Comment commentExist(Integer commentId) {
         Comment comment = getById(commentId);
         if (comment == null) {
             throw new MicroShareException(10024, "评论不存在。");

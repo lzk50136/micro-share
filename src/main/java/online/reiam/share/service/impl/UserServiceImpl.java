@@ -30,10 +30,10 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
-    @Autowired
-    private RoleService roleService;
     @Resource
     private UserMapper userMapper;
+    @Autowired
+    private RoleService roleService;
     @Autowired
     private UserInfoService userInfoService;
     @Autowired
@@ -56,21 +56,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     /**
-     * 用户已存在
+     * 用户是否存在
      */
     @Override
-    public void userExist(String username) {
-        User user = getOne(new QueryWrapper<User>().lambda().eq(User::getUsername, username));
-        if (user != null) {
-            throw new MicroShareException(10006, "用户已存在。");
-        }
-    }
-
-    /**
-     * 用户不存在
-     */
-    @Override
-    public User userNotExist(String username) {
+    public User userExist(String username) {
         User user = getOne(new QueryWrapper<User>().lambda().eq(User::getUsername, username));
         if (user == null) {
             throw new MicroShareException(10008, "用户不存在。");

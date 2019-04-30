@@ -19,9 +19,7 @@ public interface UserService extends IService<User> {
 
     List<String> listPermissionNameByRoleName(String roleName);
 
-    void userExist(String username);
-
-    User userNotExist(String username);
+    User userExist(String username);
 
     void validateCode(String code1, String code2);
 

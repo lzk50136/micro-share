@@ -42,7 +42,7 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements
     @Override
     public void likes(Integer userId, LikesRequest likesRequest) {
         if (likesRequest.getLikesType() == 0) {
-            Post post = postService.postNotExist(likesRequest.getTypeId());
+            Post post = postService.postExist(likesRequest.getTypeId());
             QueryWrapper<Likes> queryWrapper = new QueryWrapper<>();
             queryWrapper.lambda().eq(Likes::getUserId, userId)
                     .eq(Likes::getTypeId, likesRequest.getTypeId())
@@ -100,7 +100,7 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements
                 postService.updateById(post2);
             }
         } else if (likesRequest.getLikesType() == 1) {
-            Comment comment = commentService.commentNotExist(likesRequest.getTypeId());
+            Comment comment = commentService.commentExist(likesRequest.getTypeId());
             QueryWrapper<Likes> queryWrapper = new QueryWrapper<>();
             queryWrapper.lambda().eq(Likes::getUserId, userId)
                     .eq(Likes::getTypeId, likesRequest.getTypeId())

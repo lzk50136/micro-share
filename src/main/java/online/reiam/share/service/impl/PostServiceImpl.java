@@ -64,7 +64,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
      * 贴子是否存在
      */
     @Override
-    public Post postNotExist(Integer postId) {
+    public Post postExist(Integer postId) {
         Post post = getById(postId);
         if (post == null) {
             throw new MicroShareException(10024, "贴子不存在。");
