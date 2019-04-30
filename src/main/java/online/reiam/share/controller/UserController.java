@@ -24,9 +24,9 @@ import static online.reiam.share.constants.Constants.*;
 @RequestMapping("/user")
 public class UserController {
     @Autowired
-    private UserService userService;
-    @Autowired
     private AsyncTask asyncTask;
+    @Autowired
+    private UserService userService;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
@@ -115,8 +115,7 @@ public class UserController {
     @RequiresRoles("user")
     @PostMapping(value = "/logout", produces = APPLICATION_JSON)
     public ApiResult logout(@RequestHeader("Authorization") String authorization) {
-        Integer userId = JwtTokenUtil.getUserId(authorization);
-        stringRedisTemplate.delete(userId + REDIS_TOKEN);
+        stringRedisTemplate.delete(JwtTokenUtil.getUserId(authorization) + REDIS_TOKEN);
         return ApiResultUtil.success("操作成功。");
     }
 
