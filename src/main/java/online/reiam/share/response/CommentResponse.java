@@ -21,9 +21,9 @@ public class CommentResponse implements Serializable {
     private Integer id;
 
     /**
-     * 贴子或评论id
+     * 类型对应id
      */
-    private Integer postOrComment;
+    private Integer typeId;
 
     /**
      * 用户id

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import online.reiam.share.entity.Likes;
-import online.reiam.share.response.LikesPostResponse;
 import online.reiam.share.response.LikesResponse;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,6 +19,6 @@ public interface LikesMapper extends BaseMapper<Likes> {
 
     IPage<LikesResponse> selectUserInfoListByLikesAndType(Page page, @Param("typeId") Integer typeId, @Param("likesType") Integer likesType);
 
-    IPage<LikesPostResponse> selectLikesPostListByUserId(Page page, @Param("userId") Integer userId);
+    //IPage<LikesPostResponse> selectLikesPostListByUserId(Page page, @Param("userId") Integer userId);
 
 }

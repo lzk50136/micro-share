@@ -1,8 +1,10 @@
 package online.reiam.share.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import online.reiam.share.entity.Comment;
 import online.reiam.share.request.CommentRequest;
+import online.reiam.share.response.CommentResponse;
 
 /**
  * <p>
@@ -20,13 +22,11 @@ public interface CommentService extends IService<Comment> {
 
     void delete(CommentRequest commentRequest, Integer userId);
 
-    void hasPermission(CommentRequest commentRequest);
-
-    /*IPage<CommentResponse> listCommentByLikesNum(CommentRequest commentRequest);
+    IPage<CommentResponse> listCommentByLikesNum(CommentRequest commentRequest);
 
     IPage<CommentResponse> listCommentByModifiedTime(CommentRequest commentRequest);
 
-    List<CommentResponse> listCommentByAtMe(Integer userId, CommentRequest commentRequest);
+    /*List<CommentResponse> listCommentByAtMe(Integer userId, CommentRequest commentRequest);
 
     List<CommentResponse> listCommentByLikeMe(Integer userId, CommentRequest commentRequest);
 

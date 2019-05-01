@@ -29,7 +29,7 @@ public class CommentController {
         return ApiResultUtil.success("操作成功。");
     }
 
-    /*@PostMapping(value = "/list_comment_by_like_num", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
+    @PostMapping(value = "/list_comment_by_like_num", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult listCommentByLikesNum(@RequestBody @Validated(CommentRequest.ListCommentByType.class) CommentRequest commentRequest) {
         return ApiResultUtil.success(commentService.listCommentByLikesNum(commentRequest));
     }
@@ -39,7 +39,7 @@ public class CommentController {
         return ApiResultUtil.success(commentService.listCommentByModifiedTime(commentRequest));
     }
 
-    @PostMapping(value = "/list_comment_by_at_me", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
+    /*@PostMapping(value = "/list_comment_by_at_me", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult listCommentByAtMe(@RequestBody @Validated(CommentRequest.ListCommentByUserId.class) CommentRequest commentRequest, @RequestHeader("Authorization") String authorization) {
         return ApiResultUtil.success(commentService.listCommentByAtMe(JwtTokenUtil.getUserId(authorization), commentRequest));
     }

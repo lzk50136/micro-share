@@ -19,7 +19,7 @@
         ORDER BY likes.modified_time DESC
     </select>
 
-    <resultMap id="likesPostResponseResultMap" type="online.reiam.share.response.LikesPostResponse">
+    <!--<resultMap id="likesPostResponseResultMap" type="online.reiam.share.response.LikesPostResponse">
         <result property="postId" column="post_id"/>
         <association property="postResponse" column="post_id"
                      select="online.reiam.share.mapper.PostMapper.selectPostById">
@@ -34,6 +34,6 @@
           AND likes_type = 0
           AND user_id = #{userId}
         ORDER BY modified_time DESC
-    </select>
+    </select>-->
 
 </mapper>

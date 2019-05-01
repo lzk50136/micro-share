@@ -2,34 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="online.reiam.share.mapper.CommentMapper">
 
-    <resultMap id="userInfoResponseResultMap" type="online.reiam.share.response.UserInfoResponse">
-        <id property="id" column="id"/>
-        <result property="nickname" column="nickname"/>
-        <result property="gender" column="gender"/>
-        <result property="profilePhoto" column="profile_photo"/>
-        <result property="website" column="website"/>
-        <result property="bio" column="bio"/>
-        <result property="following" column="following"/>
-        <result property="follower" column="follower"/>
-    </resultMap>
-
-    <select id="selectUserInfoByUserId" resultMap="userInfoResponseResultMap">
-        select id,
-               nickname,
-               gender,
-               profile_photo,
-               website,
-               bio,
-               following,
-               follower
-        from user_info
-        where deleted = 0
-          AND user_id = #{userId}
-    </select>
-
     <resultMap id="commentResponseResultMap" type="online.reiam.share.response.CommentResponse">
         <id property="id" column="id"/>
-        <result property="postOrComment" column="post_or_comment"/>
+        <result property="typeId" column="type_id"/>
         <result property="userId" column="user_id"/>
         <result property="content" column="content"/>
         <result property="likesNum" column="likes_num"/>
@@ -38,16 +13,16 @@
         <result property="commentType" column="comment_type"/>
         <result property="modifiedTime" column="modified_time"/>
         <association property="sender" column="user_id"
-                     select="online.reiam.share.mapper.CommentMapper.selectUserInfoByUserId">
+                     select="online.reiam.share.mapper.UserInfoMapper.selectUserInfoByUserId">
         </association>
         <association property="receiver" column="reply_to"
-                     select="online.reiam.share.mapper.CommentMapper.selectUserInfoByUserId">
+                     select="online.reiam.share.mapper.UserInfoMapper.selectUserInfoByUserId">
         </association>
     </resultMap>
 
-    <select id="selectCommentByLikesNum" resultMap="commentResponseResultMap">
+    <select id="selectCommentListByLikesNum" resultMap="commentResponseResultMap">
         SELECT id,
-               post_or_comment,
+               type_id,
                user_id,
                content,
                likes_num,
@@ -57,14 +32,14 @@
                modified_time
         FROM comment
         WHERE deleted = 0
-          AND post_or_comment = #{postOrComment}
+          AND type_id = #{typeId}
           AND comment_type = #{commentType}
         ORDER BY likes_num DESC
     </select>
 
-    <select id="selectCommentByModifiedTime" resultMap="commentResponseResultMap">
+    <select id="selectCommentListByModifiedTime" resultMap="commentResponseResultMap">
         SELECT id,
-               post_or_comment,
+               type_id,
                user_id,
                content,
                likes_num,
@@ -74,12 +49,12 @@
                modified_time
         FROM comment
         WHERE deleted = 0
-          AND post_or_comment = #{postOrComment}
+          AND type_id = #{typeId}
           AND comment_type = #{commentType}
         ORDER BY modified_time DESC
     </select>
 
-    <select id="selectCommentByIdList" resultMap="commentResponseResultMap">
+    <!--<select id="selectCommentByIdList" resultMap="commentResponseResultMap">
         SELECT id,
         post_or_comment,
         user_id,
@@ -105,6 +80,6 @@
           AND comment_type = 1
           AND reply_to = #{userId}
         ORDER BY modified_time DESC
-    </select>
+    </select>-->
 
 </mapper>
