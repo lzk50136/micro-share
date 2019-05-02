@@ -38,6 +38,9 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements
     @Resource
     private LikesMapper likesMapper;
 
+    /**
+     * 点赞/取消点赞
+     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void likes(Integer userId, LikesRequest likesRequest) {
@@ -160,6 +163,9 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements
         }
     }
 
+    /**
+     * 获取点赞的用户列表
+     */
     @Override
     public IPage<LikesResponse> listUserInfoByLikesAndType(LikesRequest likesRequest) {
         Page<LikesResponse> page = new Page<>(likesRequest.getPageNum(), likesRequest.getPageSize());

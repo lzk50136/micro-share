@@ -17,23 +17,35 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    /**
+     * 新增评论
+     */
     @PostMapping(value = "/comment", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult comment(@RequestBody @Validated(CommentRequest.Comment.class) CommentRequest commentRequest, @RequestHeader("Authorization") String authorization) {
         commentService.comment(JwtTokenUtil.getUserId(authorization), commentRequest);
         return ApiResultUtil.success("操作成功。");
     }
 
+    /**
+     * 删除评论
+     */
     @PostMapping(value = "/delete", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult delete(@RequestBody @Validated(CommentRequest.Delete.class) CommentRequest commentRequest, @RequestHeader("Authorization") String authorization) {
         commentService.delete(commentRequest, JwtTokenUtil.getUserId(authorization));
         return ApiResultUtil.success("操作成功。");
     }
 
+    /**
+     * 根据点赞数获取评论列表
+     */
     @PostMapping(value = "/list_comment_by_like_num", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult listCommentByLikesNum(@RequestBody @Validated(CommentRequest.ListCommentByType.class) CommentRequest commentRequest) {
         return ApiResultUtil.success(commentService.listCommentByLikesNum(commentRequest));
     }
 
+    /**
+     * 根据评论时间获取评论列表
+     */
     @PostMapping(value = "/list_comment_by_modified_time", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult listCommentByModifiedTime(@RequestBody @Validated(CommentRequest.ListCommentByType.class) CommentRequest commentRequest) {
         return ApiResultUtil.success(commentService.listCommentByModifiedTime(commentRequest));

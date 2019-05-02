@@ -24,6 +24,9 @@ import java.time.LocalDateTime;
 @Service
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements UserInfoService {
 
+    /**
+     * 用户是否存在
+     */
     @Override
     public UserInfo userExist(String nickname) {
         UserInfo userInfo = getOne(new QueryWrapper<UserInfo>().lambda().eq(UserInfo::getNickname, nickname));
@@ -33,6 +36,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         return userInfo;
     }
 
+    /**
+     * 获取用户信息
+     */
     @Override
     public UserInfoResponse getUserInfoResponse(UserInfo userInfo, Integer userId) {
         UserInfoResponse userInfoResponse = new UserInfoResponse();
@@ -45,6 +51,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         return userInfoResponse;
     }
 
+    /**
+     * 修改用户信息
+     */
     @Override
     public void updateUserInfo(UserInfoRequest userInfoRequest, Integer userId) {
         UserInfo userInfo2 = new UserInfo();

@@ -177,12 +177,18 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         }
     }
 
+    /**
+     * 根据点赞数获取评论列表
+     */
     @Override
     public IPage<CommentResponse> listCommentByLikesNum(CommentRequest commentRequest) {
         Page<CommentResponse> page = new Page<>(commentRequest.getPageNum(), commentRequest.getPageSize());
         return commentMapper.selectCommentListByLikesNum(page, commentRequest.getTypeId(), commentRequest.getCommentType());
     }
 
+    /**
+     * 根据评论时间获取评论列表
+     */
     @Override
     public IPage<CommentResponse> listCommentByModifiedTime(CommentRequest commentRequest) {
         Page<CommentResponse> page = new Page<>(commentRequest.getPageNum(), commentRequest.getPageSize());

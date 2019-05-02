@@ -35,6 +35,9 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
     @Resource
     private UserFollowMapper userFollowMapper;
 
+    /**
+     * 获取关注记录
+     */
     @Override
     public UserFollow getFollow(Integer userId, Integer followId) {
         QueryWrapper<UserFollow> queryWrapper = new QueryWrapper<>();
@@ -44,7 +47,7 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
     }
 
     /**
-     * 关注服务
+     * 关注/取消关注
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -117,8 +120,8 @@ public class UserFollowServiceImpl extends ServiceImpl<UserFollowMapper, UserFol
                     .setVersion(userInfo4.getVersion())
                     .setModifiedTime(LocalDateTime.now());
             userInfoService.updateById(userInfo5);
-        } else {
             // 如果提交的操作是取消关注
+        } else {
             // 如果从来没有关注过，无需操作
             if (userFollow == null) {
                 throw new MicroShareException(10017, "没有关注过，何来取消关注呢？");

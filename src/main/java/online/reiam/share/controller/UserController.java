@@ -56,7 +56,6 @@ public class UserController {
             throw new MicroShareException(10006, "用户名已被注册。");
         }
         userService.validateCode(userRequest.getCode(), stringRedisTemplate.opsForValue().get(userRequest.getUsername() + REDIS_REGISTER));
-        // 注册账号的验证码用过一次后失效
         stringRedisTemplate.delete(userRequest.getUsername() + REDIS_REGISTER);
         userService.signUp(userRequest.getUsername(), BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt()), "user");
         return ApiResultUtil.success("操作成功。");
@@ -101,19 +100,17 @@ public class UserController {
             throw new MicroShareException(10010, "用户处于封停状态。");
         }
         userService.validateCode(userRequest.getCode(), stringRedisTemplate.opsForValue().get(userRequest.getUsername() + REDIS_RESET));
-        // 重置密码的验证码用过一次后失效
         stringRedisTemplate.delete(userRequest.getUsername() + REDIS_RESET);
         User user2 = new User();
         user2.setId(user.getId())
                 .setPassword(BCrypt.hashpw(userRequest.getPassword(), BCrypt.gensalt()))
                 .setVersion(user.getVersion())
                 .setModifiedTime(LocalDateTime.now());
-        if (userService.updateById(user2)) {
-            // 重置成功后使原来的登录token失效
-            stringRedisTemplate.delete(user.getId() + REDIS_TOKEN);
-            return ApiResultUtil.success("操作成功。");
+        if (!userService.updateById(user2)) {
+            throw new MicroShareException(10001, "操作失败。");
         }
-        throw new MicroShareException(10001, "操作失败。");
+        stringRedisTemplate.delete(user.getId() + REDIS_TOKEN);
+        return ApiResultUtil.success("重置成功。");
     }
 
     /**
@@ -147,9 +144,8 @@ public class UserController {
         if (!userService.updateById(user2)) {
             throw new MicroShareException(10001, "操作失败。");
         }
-        // 修改成功后使原来的登录token失效
         stringRedisTemplate.delete(user.getId() + REDIS_TOKEN);
-        return ApiResultUtil.success("操作成功。");
+        return ApiResultUtil.success("修改成功。");
     }
 
     /**
