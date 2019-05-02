@@ -13,4 +13,6 @@ import online.reiam.share.entity.Topic;
  */
 public interface TopicService extends IService<Topic> {
 
+    Topic exist(String topicName);
+
 }

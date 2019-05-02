@@ -26,4 +26,6 @@ public interface PostMapper extends BaseMapper<Post> {
 
     IPage<PostResponse> selectPostListByFollowId(Page page, List<Integer> list, LocalDateTime startTime, LocalDateTime endTime);
 
+    List<PostResponse> selectPostListByIdList(List<Integer> list);
+
 }

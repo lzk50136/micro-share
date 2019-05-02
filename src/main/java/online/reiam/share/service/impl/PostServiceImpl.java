@@ -197,7 +197,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
      */
     @Override
     public IPage<PostResponse> listPostByUserId(PostRequest postRequest) {
-        UserInfo userInfo = userInfoService.userExist(postRequest.getNickname());
+        UserInfo userInfo = userInfoService.exist(postRequest.getNickname());
         Page<PostResponse> page = new Page<>(postRequest.getPageNum(), postRequest.getPageSize());
         return postMapper.selectPostListByUserId(page, userInfo.getUserId());
     }

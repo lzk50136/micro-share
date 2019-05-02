@@ -46,4 +46,14 @@
         ORDER BY modified_time DESC
     </select>
 
+    <select id="selectPostListByIdList" resultMap="postResponseResultMap">
+        SELECT id, user_id, title, likes_num, comment_num, allow_comment, modified_time
+        FROM post
+        WHERE deleted = 0
+        AND id = IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
 </mapper>
