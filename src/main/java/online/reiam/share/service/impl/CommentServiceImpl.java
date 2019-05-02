@@ -50,7 +50,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
      * 评论是否存在
      */
     @Override
-    public Comment commentExist(Integer commentId) {
+    public Comment exist(Integer commentId) {
         Comment comment = getById(commentId);
         if (comment == null) {
             throw new MicroShareException(10032, "评论不存在。");
@@ -68,7 +68,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         // 如果评论类型为贴子评论
         if (commentRequest.getCommentType() == 0) {
             // 贴子是否存在及是否允许评论
-            Post post = postService.postExist(commentRequest.getTypeId());
+            Post post = postService.exist(commentRequest.getTypeId());
             if (!post.getAllowComment()) {
                 throw new MicroShareException(10031, "贴子不允许评论。");
             }
@@ -98,7 +98,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             // 如果评论类型为回复评论
         } else if (commentRequest.getCommentType() == 1) {
             // 评论是否存在
-            Comment comment = commentExist(commentRequest.getTypeId());
+            Comment comment = exist(commentRequest.getTypeId());
             // 插入评论记录
             Comment comment2 = new Comment();
             comment2.setTypeId(commentRequest.getTypeId())
@@ -150,7 +150,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public void delete(CommentRequest commentRequest, Integer userId) {
         // 查找评论是否存在及是否属于自己的评论
-        Comment comment = commentExist(commentRequest.getId());
+        Comment comment = exist(commentRequest.getId());
         if (!comment.getUserId().equals(userId)) {
             throw new MicroShareException(10033, "只能删除自己的评论。");
         }

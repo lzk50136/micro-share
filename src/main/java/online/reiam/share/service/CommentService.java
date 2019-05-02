@@ -16,7 +16,7 @@ import online.reiam.share.response.CommentResponse;
  */
 public interface CommentService extends IService<Comment> {
 
-    Comment commentExist(Integer commentId);
+    Comment exist(Integer commentId);
 
     void comment(Integer userId, CommentRequest commentRequest);
 

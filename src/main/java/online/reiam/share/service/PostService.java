@@ -16,11 +16,11 @@ import online.reiam.share.response.PostResponse;
  */
 public interface PostService extends IService<Post> {
 
-    Post postExist(Integer postId);
+    Post exist(Integer postId);
 
-    PostResponse addPost(Integer userId, PostRequest postRequest);
+    PostResponse create(Integer userId, PostRequest postRequest);
 
-    void removePostById(Integer userId, Integer postId);
+    void delete(Integer userId, Integer postId);
 
     IPage<PostResponse> listPostByUserId(PostRequest postRequest);
 

@@ -64,7 +64,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
      * 贴子是否存在
      */
     @Override
-    public Post postExist(Integer postId) {
+    public Post exist(Integer postId) {
         Post post = getById(postId);
         if (post == null) {
             throw new MicroShareException(10024, "贴子不存在。");
@@ -77,7 +77,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public PostResponse addPost(Integer userId, PostRequest postRequest) {
+    public PostResponse create(Integer userId, PostRequest postRequest) {
         // 检查图片是否存在以及排序是否重复
         Map<Integer, Integer> integerMap = new HashMap<>();
         for (int i = 0; i < postRequest.getPostDetailRequestList().size(); i++) {
@@ -180,7 +180,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void removePostById(Integer userId, Integer postId) {
+    public void delete(Integer userId, Integer postId) {
         Post post = getById(postId);
         if (post == null) {
             throw new MicroShareException(10024, "贴子不存在。");

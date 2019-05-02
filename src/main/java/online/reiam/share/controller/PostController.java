@@ -21,18 +21,18 @@ public class PostController {
     /**
      * 发布新贴子
      */
-    @PostMapping(value = "/create_post", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
-    public ApiResult createPost(@RequestBody @Validated(PostRequest.AddPost.class) PostRequest postRequest, @RequestHeader("Authorization") String authorization) {
-        PostResponse postResponse = postService.addPost(JwtTokenUtil.getUserId(authorization), postRequest);
+    @PostMapping(value = "/create", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
+    public ApiResult create(@RequestBody @Validated(PostRequest.AddPost.class) PostRequest postRequest, @RequestHeader("Authorization") String authorization) {
+        PostResponse postResponse = postService.create(JwtTokenUtil.getUserId(authorization), postRequest);
         return ApiResultUtil.success(postResponse);
     }
 
     /**
      * 删除贴子
      */
-    @PostMapping(value = "/delete_post", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
-    public ApiResult deletePost(@RequestBody @Validated(PostRequest.DeletePost.class) PostRequest postRequest, @RequestHeader("Authorization") String authorization) {
-        postService.removePostById(JwtTokenUtil.getUserId(authorization), postRequest.getId());
+    @PostMapping(value = "/delete", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
+    public ApiResult delete(@RequestBody @Validated(PostRequest.DeletePost.class) PostRequest postRequest, @RequestHeader("Authorization") String authorization) {
+        postService.delete(JwtTokenUtil.getUserId(authorization), postRequest.getId());
         return ApiResultUtil.success("操作成功。");
     }
 

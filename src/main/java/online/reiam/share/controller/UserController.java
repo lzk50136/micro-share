@@ -66,7 +66,7 @@ public class UserController {
      */
     @PostMapping(value = "/login", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult login(@RequestBody @Validated(UserRequest.Login.class) UserRequest userRequest) {
-        User user = userService.userExist(userRequest.getUsername());
+        User user = userService.exist(userRequest.getUsername());
         if (!BCrypt.checkpw(userRequest.getPassword(), user.getPassword())) {
             throw new MicroShareException(10009, "密码错误。");
         }
@@ -83,7 +83,7 @@ public class UserController {
      */
     @PostMapping(value = "/reset_password_validate", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult resetPasswordValidate(@RequestBody @Validated(UserRequest.Validate.class) UserRequest userRequest) {
-        User user = userService.userExist(userRequest.getUsername());
+        User user = userService.exist(userRequest.getUsername());
         String validateCode = String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
         stringRedisTemplate.opsForValue().set(userRequest.getUsername() + REDIS_RESET, validateCode, 10, TimeUnit.MINUTES);
         asyncTask.sendMail(user.getUsername(), "微分享重置密码。", "您的重置验证码为：" + validateCode + "。");
@@ -95,7 +95,7 @@ public class UserController {
      */
     @PostMapping(value = "/reset_password", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult resetPassword(@RequestBody @Validated(UserRequest.ResetPassword.class) UserRequest userRequest) {
-        User user = userService.userExist(userRequest.getUsername());
+        User user = userService.exist(userRequest.getUsername());
         if (user.getDisabled()) {
             throw new MicroShareException(10010, "用户处于封停状态。");
         }

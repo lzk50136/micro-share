@@ -25,8 +25,8 @@ public class UserInfoController {
     @RequiresRoles("user")
     @PostMapping(value = "/get_user_info", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult getUserInfo(@RequestBody @Validated(UserInfoRequest.GetUserInfo.class) UserInfoRequest userInfoRequest, @RequestHeader("Authorization") String authorization) {
-        UserInfo userInfo = userInfoService.userExist(userInfoRequest.getNickname());
-        return ApiResultUtil.success(userInfoService.getUserInfoResponse(userInfo, JwtTokenUtil.getUserId(authorization)));
+        UserInfo userInfo = userInfoService.exist(userInfoRequest.getNickname());
+        return ApiResultUtil.success(userInfoService.getUserInfo(userInfo, JwtTokenUtil.getUserId(authorization)));
     }
 
     /**

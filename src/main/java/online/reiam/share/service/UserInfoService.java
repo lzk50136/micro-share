@@ -15,9 +15,9 @@ import online.reiam.share.response.UserInfoResponse;
  */
 public interface UserInfoService extends IService<UserInfo> {
 
-    UserInfo userExist(String nickname);
+    UserInfo exist(String nickname);
 
-    UserInfoResponse getUserInfoResponse(UserInfo userInfo, Integer userId);
+    UserInfoResponse getUserInfo(UserInfo userInfo, Integer userId);
 
     void updateUserInfo(UserInfoRequest userInfoRequest, Integer userId);
 

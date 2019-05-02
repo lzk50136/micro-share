@@ -59,7 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 用户是否存在
      */
     @Override
-    public User userExist(String username) {
+    public User exist(String username) {
         User user = getOne(new QueryWrapper<User>().lambda().eq(User::getUsername, username));
         if (user == null) {
             throw new MicroShareException(10008, "用户不存在。");

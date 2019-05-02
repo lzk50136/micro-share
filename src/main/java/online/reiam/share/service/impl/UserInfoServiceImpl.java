@@ -28,7 +28,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
      * 用户是否存在
      */
     @Override
-    public UserInfo userExist(String nickname) {
+    public UserInfo exist(String nickname) {
         UserInfo userInfo = getOne(new QueryWrapper<UserInfo>().lambda().eq(UserInfo::getNickname, nickname));
         if (userInfo == null) {
             throw new MicroShareException(10008, "用户不存在。");
@@ -40,7 +40,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
      * 获取用户信息
      */
     @Override
-    public UserInfoResponse getUserInfoResponse(UserInfo userInfo, Integer userId) {
+    public UserInfoResponse getUserInfo(UserInfo userInfo, Integer userId) {
         UserInfoResponse userInfoResponse = new UserInfoResponse();
         // 判断是否本人获取，他人获取和本人获取看到的信息部分不一样
         if (userInfo.getUserId().equals(userId)) {
