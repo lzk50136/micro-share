@@ -2,6 +2,7 @@ package online.reiam.share.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import online.reiam.share.entity.TopicFollow;
+import online.reiam.share.request.TopicFollowRequest;
 
 /**
  * <p>
@@ -12,5 +13,7 @@ import online.reiam.share.entity.TopicFollow;
  * @since 2019-04-29
  */
 public interface TopicFollowService extends IService<TopicFollow> {
+
+    void follow(Integer userId, TopicFollowRequest topicFollowRequest);
 
 }

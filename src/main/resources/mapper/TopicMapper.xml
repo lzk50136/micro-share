@@ -2,4 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="online.reiam.share.mapper.TopicMapper">
 
+    <resultMap id="topicResponseResultMap" type="online.reiam.share.response.TopicResponse">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="followNum" column="follow_num"/>
+        <result property="postNum" column="post_num"/>
+    </resultMap>
+
+    <select id="selectTopicListByUserId" resultMap="topicResponseResultMap">
+        SELECT topic.id, topic.name, topic.follow_num, topic.post_num
+        FROM topic,
+             topic_follow
+        WHERE topic.deleted = 0
+          AND topic_follow.deleted = 0
+          AND topic.id = topic_follow.topic_id
+          AND topic_follow.follow = 1
+          AND user_id = #{userId}
+        ORDER BY topic.modified_time DESC
+    </select>
+
 </mapper>

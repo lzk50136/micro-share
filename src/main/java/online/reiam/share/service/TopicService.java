@@ -1,7 +1,10 @@
 package online.reiam.share.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import online.reiam.share.entity.Topic;
+import online.reiam.share.request.TopicFollowRequest;
+import online.reiam.share.response.TopicResponse;
 
 /**
  * <p>
@@ -14,5 +17,7 @@ import online.reiam.share.entity.Topic;
 public interface TopicService extends IService<Topic> {
 
     Topic exist(String topicName);
+
+    IPage<TopicResponse> listTopicByUserFollow(TopicFollowRequest topicFollowRequest, Integer userId);
 
 }
