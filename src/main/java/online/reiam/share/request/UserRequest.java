@@ -73,8 +73,8 @@ public class UserRequest implements Serializable {
     /**
      * 新密码
      */
-    @Size(min = 6, max = 18, message = "新密码长度6-18位。", groups = {UpdatePassword.class})
-    @NotBlank(message = "新密码不能为空。", groups = {UpdatePassword.class})
+    @Size(min = 6, max = 18, message = "新密码长度6-18位。", groups = UpdatePassword.class)
+    @NotBlank(message = "新密码不能为空。", groups = UpdatePassword.class)
     @JsonProperty(value = "new_password")
     private String newPassword;
 

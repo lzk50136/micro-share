@@ -21,35 +21,29 @@ public class PostRequest implements Serializable {
 
     private static final long serialVersionUID = 1388990602484094731L;
 
-    public interface AddPost {
+    public interface Create {
     }
 
-    public interface DeletePost {
+    public interface Delete {
     }
 
     public interface ListPostByNickname {
     }
 
-    public interface ListPostByTopicName {
-    }
-
-    public interface ListPostByUserId {
-    }
-
     public interface ListPostByFollowId {
     }
 
-    @NotBlank(message = "id不能为空。", groups = DeletePost.class)
+    @NotBlank(message = "id不能为空。", groups = Delete.class)
     @JsonProperty(value = "id")
     private Integer id;
 
-    @NotBlank(message = "title不能为空。", groups = AddPost.class)
+    @NotBlank(message = "title不能为空。", groups = Create.class)
     @JsonProperty(value = "title")
     private String title;
 
     @Valid
-    @Size(min = 1, max = 9, message = "post_detail_list必须大于0和小于10。", groups = AddPost.class)
-    @NotNull(message = "post_detail_list不能为空。", groups = AddPost.class)
+    @Size(min = 1, max = 9, message = "post_detail_list必须大于0和小于10。", groups = Create.class)
+    @NotNull(message = "post_detail_list不能为空。", groups = Create.class)
     @JsonProperty(value = "post_detail_list")
     private List<PostDetailRequest> postDetailRequestList;
 
@@ -57,19 +51,15 @@ public class PostRequest implements Serializable {
     @JsonProperty(value = "nickname")
     private String nickname;
 
-    @NotNull(message = "topic_name不能为空。", groups = ListPostByTopicName.class)
-    @JsonProperty(value = "topic_name")
-    private String topicName;
-
-    @NotNull(message = "allow_comment不能为空。", groups = AddPost.class)
+    @NotNull(message = "allow_comment不能为空。", groups = Create.class)
     @JsonProperty(value = "allow_comment")
     private Boolean allowComment;
 
-    @NotNull(message = "page_num不能为空。", groups = {ListPostByNickname.class, ListPostByTopicName.class, ListPostByFollowId.class, ListPostByUserId.class})
+    @NotNull(message = "page_num不能为空。", groups = {ListPostByNickname.class, ListPostByFollowId.class})
     @JsonProperty(value = "page_num")
     private Integer pageNum;
 
-    @NotNull(message = "page_size不能为空。", groups = {ListPostByNickname.class, ListPostByTopicName.class, ListPostByFollowId.class, ListPostByUserId.class})
+    @NotNull(message = "page_size不能为空。", groups = {ListPostByNickname.class, ListPostByFollowId.class})
     @JsonProperty(value = "page_size")
     private Integer pageSize;
 

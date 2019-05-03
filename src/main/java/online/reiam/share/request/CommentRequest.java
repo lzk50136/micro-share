@@ -24,9 +24,6 @@ public class CommentRequest implements Serializable {
     public interface ListCommentByType {
     }
 
-    public interface ListCommentByUserId {
-    }
-
     @NotNull(message = "id不能为空。", groups = Delete.class)
     @JsonProperty(value = "id")
     private Integer id;
@@ -43,11 +40,11 @@ public class CommentRequest implements Serializable {
     @JsonProperty(value = "comment_type")
     private Integer commentType;
 
-    @NotNull(message = "page_num不能为空。", groups = {ListCommentByType.class, ListCommentByUserId.class})
+    @NotNull(message = "page_num不能为空。", groups = ListCommentByType.class)
     @JsonProperty(value = "page_num")
     private Integer pageNum;
 
-    @NotNull(message = "page_size不能为空。", groups = {ListCommentByType.class, ListCommentByUserId.class})
+    @NotNull(message = "page_size不能为空。", groups = ListCommentByType.class)
     @JsonProperty(value = "page_size")
     private Integer pageSize;
 
