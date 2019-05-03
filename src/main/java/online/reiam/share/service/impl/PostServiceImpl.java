@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 /**
  * <p>
- * 用户贴子表 服务实现类
+ * 贴子表 服务实现类
  * </p>
  *
  * @author Lzk

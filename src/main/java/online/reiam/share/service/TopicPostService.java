@@ -8,7 +8,7 @@ import online.reiam.share.response.PostResponse;
 
 /**
  * <p>
- * 贴子话题表 服务类
+ * 话题贴子表 服务类
  * </p>
  *
  * @author Lzk

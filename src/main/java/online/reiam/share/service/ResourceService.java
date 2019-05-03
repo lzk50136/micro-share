@@ -9,7 +9,7 @@ import java.io.IOException;
 
 /**
  * <p>
- * 贴子资源表 服务类
+ * 资源表 服务类
  * </p>
  *
  * @author Lzk

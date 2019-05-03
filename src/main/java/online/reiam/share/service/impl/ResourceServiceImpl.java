@@ -39,7 +39,7 @@ import static online.reiam.share.constants.Constants.RESOURCE_PATH;
 
 /**
  * <p>
- * 贴子资源表 服务实现类
+ * 资源表 服务实现类
  * </p>
  *
  * @author Lzk

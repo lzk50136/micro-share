@@ -5,7 +5,7 @@ import online.reiam.share.entity.AtMe;
 
 /**
  * <p>
- * 贴子艾特表 服务类
+ * 艾特表 服务类
  * </p>
  *
  * @author Lzk

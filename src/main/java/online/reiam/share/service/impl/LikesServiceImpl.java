@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 贴子点赞表 服务实现类
+ * 点赞表 服务实现类
  * </p>
  *
  * @author Lzk

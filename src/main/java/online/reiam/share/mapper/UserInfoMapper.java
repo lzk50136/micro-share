@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * <p>
- * Mapper 接口
+ * 用户信息表 Mapper 接口
  * </p>
  *
  * @author Lzk

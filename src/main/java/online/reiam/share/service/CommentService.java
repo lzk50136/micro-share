@@ -8,7 +8,7 @@ import online.reiam.share.response.CommentResponse;
 
 /**
  * <p>
- * 贴子评论表 服务类
+ * 评论表 服务类
  * </p>
  *
  * @author Lzk

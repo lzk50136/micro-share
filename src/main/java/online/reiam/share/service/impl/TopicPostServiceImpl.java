@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 
 /**
  * <p>
- * 贴子话题表 服务实现类
+ * 话题贴子表 服务实现类
  * </p>
  *
  * @author Lzk

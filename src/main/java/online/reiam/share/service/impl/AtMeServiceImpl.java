@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 贴子艾特表 服务实现类
+ * 艾特表 服务实现类
  * </p>
  *
  * @author Lzk
