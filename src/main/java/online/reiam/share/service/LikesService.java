@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import online.reiam.share.entity.Likes;
 import online.reiam.share.request.LikesRequest;
-import online.reiam.share.response.LikesResponse;
+import online.reiam.share.response.UserInfoResponse;
 
 /**
  * <p>
@@ -18,6 +18,6 @@ public interface LikesService extends IService<Likes> {
 
     void likes(Integer userId, LikesRequest likesRequest);
 
-    IPage<LikesResponse> listUserInfoByLikes(LikesRequest likesRequest);
+    IPage<UserInfoResponse> listUserInfoByLikes(LikesRequest likesRequest);
 
 }

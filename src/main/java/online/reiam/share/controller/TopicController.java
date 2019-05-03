@@ -21,6 +21,9 @@ public class TopicController {
     @Autowired
     private TopicService topicService;
 
+    /**
+     * 获取话题信息
+     */
     @PostMapping(value = "/get_topic", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult getTopic(@RequestBody @Validated(TopicRequest.GetTopic.class) TopicRequest topicRequest) {
         Topic topic = topicService.exist(topicRequest.getName());
@@ -29,6 +32,9 @@ public class TopicController {
         return ApiResultUtil.success(topicResponse);
     }
 
+    /**
+     * 获取用户关注的话题列表
+     */
     @PostMapping(value = "/list_topic_by_user_follow", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult listTopicByUserFollow(@RequestBody @Validated(TopicFollowRequest.ListTopicByUserFollow.class) TopicFollowRequest topicFollowRequest, @RequestHeader("Authorization") String authorization) {
         return ApiResultUtil.success(topicService.listTopicByUserFollow(topicFollowRequest, JwtTokenUtil.getUserId(authorization)));

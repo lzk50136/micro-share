@@ -73,10 +73,7 @@ public class UserCollectionServiceImpl extends ServiceImpl<UserCollectionMapper,
         IPage<Integer> page2 = userCollectionMapper.selectPostIdListByUserId(page, userId);
         IPage<PostResponse> page3 = new Page<>(userCollectionRequest.getPageNum(), userCollectionRequest.getPageSize());
         page3.setRecords(postMapper.selectPostListByIdList(page2.getRecords()))
-                .setPages(page2.getPages())
-                .setTotal(page2.getTotal())
-                .setSize(page2.getSize())
-                .setCurrent(page2.getCurrent());
+                .setTotal(page2.getTotal()).setSize(page2.getSize()).setCurrent(page2.getCurrent()).setPages(page2.getPages());
         return page3;
     }
 

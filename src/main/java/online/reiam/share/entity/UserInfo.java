@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- *
+ * 用户信息表
  * </p>
  *
  * @author Lzk

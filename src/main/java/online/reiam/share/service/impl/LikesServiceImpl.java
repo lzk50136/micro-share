@@ -9,8 +9,9 @@ import online.reiam.share.entity.Likes;
 import online.reiam.share.entity.Post;
 import online.reiam.share.exception.MicroShareException;
 import online.reiam.share.mapper.LikesMapper;
+import online.reiam.share.mapper.UserInfoMapper;
 import online.reiam.share.request.LikesRequest;
-import online.reiam.share.response.LikesResponse;
+import online.reiam.share.response.UserInfoResponse;
 import online.reiam.share.service.CommentService;
 import online.reiam.share.service.LikesService;
 import online.reiam.share.service.PostService;
@@ -37,6 +38,8 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements
     private CommentService commentService;
     @Resource
     private LikesMapper likesMapper;
+    @Resource
+    private UserInfoMapper userInfoMapper;
 
     /**
      * 点赞/取消点赞
@@ -167,9 +170,13 @@ public class LikesServiceImpl extends ServiceImpl<LikesMapper, Likes> implements
      * 获取点赞的用户列表
      */
     @Override
-    public IPage<LikesResponse> listUserInfoByLikes(LikesRequest likesRequest) {
-        Page<LikesResponse> page = new Page<>(likesRequest.getPageNum(), likesRequest.getPageSize());
-        return likesMapper.selectUserInfoListByLikesAndType(page, likesRequest.getTypeId(), likesRequest.getLikesType());
+    public IPage<UserInfoResponse> listUserInfoByLikes(LikesRequest likesRequest) {
+        Page<Integer> page = new Page<>(likesRequest.getPageNum(), likesRequest.getPageSize());
+        IPage<Integer> page2 = likesMapper.selectUserIdListByLikesAndType(page, likesRequest.getTypeId(), likesRequest.getLikesType());
+        IPage<UserInfoResponse> page3 = new Page<>(likesRequest.getPageNum(), likesRequest.getPageSize());
+        page3.setRecords(userInfoMapper.selectUserInfoListByUserIdList(page2.getRecords()))
+                .setTotal(page2.getTotal()).setSize(page2.getSize()).setCurrent(page2.getCurrent()).setPages(page2.getPages());
+        return page3;
     }
 
 }

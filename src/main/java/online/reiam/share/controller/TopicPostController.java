@@ -19,6 +19,9 @@ public class TopicPostController {
     @Autowired
     private TopicPostService topicPostService;
 
+    /**
+     * 获取话题相关的贴子
+     */
     @PostMapping(value = "/list_post_by_topic_name", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult listPostByTopicName(@RequestBody @Validated(TopicPostRequest.ListPostByTopicName.class) TopicPostRequest topicPostRequest) {
         return ApiResultUtil.success(topicPostService.listPostByTopicName(topicPostRequest));

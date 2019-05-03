@@ -5,6 +5,8 @@ import online.reiam.share.entity.UserInfo;
 import online.reiam.share.response.UserInfoResponse;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * <p>
  * Mapper 接口
@@ -16,5 +18,7 @@ import org.apache.ibatis.annotations.Param;
 public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
     UserInfoResponse selectUserInfoByUserId(@Param("userId") Integer userId);
+
+    List<UserInfoResponse> selectUserInfoListByUserIdList(List<Integer> list);
 
 }

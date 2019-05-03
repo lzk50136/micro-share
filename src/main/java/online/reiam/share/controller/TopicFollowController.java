@@ -17,6 +17,9 @@ public class TopicFollowController {
     @Autowired
     private TopicFollowService topicFollowService;
 
+    /**
+     * 关注/取消关注
+     */
     @PostMapping(value = "/follow", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     public ApiResult follow(@RequestBody @Validated(TopicFollowRequest.Follow.class) TopicFollowRequest topicFollowRequest, @RequestHeader("Authorization") String authorization) {
         topicFollowService.follow(JwtTokenUtil.getUserId(authorization), topicFollowRequest);

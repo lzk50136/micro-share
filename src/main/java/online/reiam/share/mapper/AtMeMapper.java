@@ -5,7 +5,7 @@ import online.reiam.share.entity.AtMe;
 
 /**
  * <p>
- * 贴子艾特表 Mapper 接口
+ * 艾特表 Mapper 接口
  * </p>
  *
  * @author Lzk

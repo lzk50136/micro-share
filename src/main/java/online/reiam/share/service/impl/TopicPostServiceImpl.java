@@ -40,10 +40,7 @@ public class TopicPostServiceImpl extends ServiceImpl<TopicPostMapper, TopicPost
         IPage<Integer> page2 = topicPostMapper.selectPostIdListByTopicId(page, topic.getId());
         IPage<PostResponse> page3 = new Page<>(topicPostRequest.getPageNum(), topicPostRequest.getPageSize());
         page3.setRecords(postMapper.selectPostListByIdList(page2.getRecords()))
-                .setTotal(page2.getTotal())
-                .setSize(page2.getSize())
-                .setCurrent(page2.getCurrent())
-                .setPages(page2.getPages());
+                .setTotal(page2.getTotal()).setPages(page2.getPages()).setSize(page2.getSize()).setCurrent(page2.getCurrent());
         return page3;
     }
 

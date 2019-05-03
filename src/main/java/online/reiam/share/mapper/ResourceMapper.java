@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
- * 贴子资源表 Mapper 接口
+ * 资源表 Mapper 接口
  * </p>
  *
  * @author Lzk

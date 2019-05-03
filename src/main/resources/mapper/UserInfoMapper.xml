@@ -3,7 +3,6 @@
 <mapper namespace="online.reiam.share.mapper.UserInfoMapper">
 
     <resultMap id="userInfoResponseResultMap" type="online.reiam.share.response.UserInfoResponse">
-        <id property="id" column="id"/>
         <result property="nickname" column="nickname"/>
         <result property="gender" column="gender"/>
         <result property="profilePhoto" column="profile_photo"/>
@@ -14,17 +13,32 @@
     </resultMap>
 
     <select id="selectUserInfoByUserId" resultMap="userInfoResponseResultMap">
-        select id,
-               nickname,
+        SELECT nickname,
                gender,
                profile_photo,
                website,
                bio,
                following,
                follower
-        from user_info
-        where deleted = 0
+        FROM user_info
+        WHERE deleted = 0
           AND user_id = #{userId}
+    </select>
+
+    <select id="selectUserInfoListByUserIdList" resultMap="userInfoResponseResultMap">
+        SELECT nickname,
+        gender,
+        profile_photo,
+        website,
+        bio,
+        following,
+        follower
+        FROM user_info
+        WHERE deleted = 0
+        AND user_id = IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </select>
 
 </mapper>

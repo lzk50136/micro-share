@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * <p>
- * 用户贴子表 Mapper 接口
+ * 贴子表 Mapper 接口
  * </p>
  *
  * @author Lzk

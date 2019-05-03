@@ -15,8 +15,8 @@
              topic_follow
         WHERE topic.deleted = 0
           AND topic_follow.deleted = 0
-          AND topic.id = topic_follow.topic_id
           AND topic_follow.follow = 1
+          AND topic.id = topic_follow.topic_id
           AND user_id = #{userId}
         ORDER BY topic.modified_time DESC
     </select>

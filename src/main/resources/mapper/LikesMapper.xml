@@ -2,21 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="online.reiam.share.mapper.LikesMapper">
 
-    <resultMap id="likesResponseResultMap" type="online.reiam.share.response.LikesResponse">
-        <result property="userId" column="user_id"/>
-        <association property="userInfoResponse" column="user_id"
-                     select="online.reiam.share.mapper.UserInfoMapper.selectUserInfoByUserId">
-        </association>
-    </resultMap>
-
-    <select id="selectUserInfoListByLikesAndType" resultMap="likesResponseResultMap">
-        SELECT likes.user_id
+    <select id="selectUserIdListByLikesAndType" resultType="java.lang.Integer">
+        SELECT user_id
         FROM likes
-        WHERE likes.deleted = 0
-          AND likes.likes = 1
-          AND likes.type_id = #{typeId}
-          AND likes.likes_type = #{likesType}
-        ORDER BY likes.modified_time DESC
+        WHERE deleted = 0
+          AND likes = 1
+          AND type_id = #{typeId}
+          AND likes_type = #{likesType}
+        ORDER BY modified_time DESC
     </select>
 
 </mapper>
