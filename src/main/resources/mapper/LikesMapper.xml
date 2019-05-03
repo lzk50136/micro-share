@@ -19,21 +19,4 @@
         ORDER BY likes.modified_time DESC
     </select>
 
-    <!--<resultMap id="likesPostResponseResultMap" type="online.reiam.share.response.LikesPostResponse">
-        <result property="postId" column="post_id"/>
-        <association property="postResponse" column="post_id"
-                     select="online.reiam.share.mapper.PostMapper.selectPostById">
-        </association>
-    </resultMap>
-
-    <select id="selectLikesPostListByUserId" resultMap="likesPostResponseResultMap">
-        SELECT type_id
-        FROM likes
-        WHERE deleted = 0
-          AND likes = 1
-          AND likes_type = 0
-          AND user_id = #{userId}
-        ORDER BY modified_time DESC
-    </select>-->
-
 </mapper>

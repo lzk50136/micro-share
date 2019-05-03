@@ -19,6 +19,4 @@ public interface LikesMapper extends BaseMapper<Likes> {
 
     IPage<LikesResponse> selectUserInfoListByLikesAndType(Page page, @Param("typeId") Integer typeId, @Param("likesType") Integer likesType);
 
-    //IPage<LikesPostResponse> selectLikesPostListByUserId(Page page, @Param("userId") Integer userId);
-
 }

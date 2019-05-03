@@ -15,18 +15,18 @@ public class TopicPostRequest implements Serializable {
 
     private static final long serialVersionUID = 8212990009741842517L;
 
-    public interface ListTopicPost {
+    public interface ListPostByTopicName {
     }
 
-    @NotNull(message = "name不能为空。", groups = ListTopicPost.class)
+    @NotNull(message = "name不能为空。", groups = ListPostByTopicName.class)
     @JsonProperty(value = "name")
     private String name;
 
-    @NotNull(message = "page_num不能为空。", groups = ListTopicPost.class)
+    @NotNull(message = "page_num不能为空。", groups = ListPostByTopicName.class)
     @JsonProperty(value = "page_num")
     private Integer pageNum;
 
-    @NotNull(message = "page_size不能为空。", groups = ListTopicPost.class)
+    @NotNull(message = "page_size不能为空。", groups = ListPostByTopicName.class)
     @JsonProperty(value = "page_size")
     private Integer pageSize;
 

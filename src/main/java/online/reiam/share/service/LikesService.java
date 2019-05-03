@@ -18,6 +18,6 @@ public interface LikesService extends IService<Likes> {
 
     void likes(Integer userId, LikesRequest likesRequest);
 
-    IPage<LikesResponse> listUserInfoByLikesAndType(LikesRequest likesRequest);
+    IPage<LikesResponse> listUserInfoByLikes(LikesRequest likesRequest);
 
 }

@@ -19,8 +19,8 @@ public class TopicPostController {
     @Autowired
     private TopicPostService topicPostService;
 
-    @PostMapping(value = "/list_topic_post", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
-    public ApiResult listTopicPost(@RequestBody @Validated(TopicPostRequest.ListTopicPost.class) TopicPostRequest topicPostRequest) {
+    @PostMapping(value = "/list_post_by_topic_name", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
+    public ApiResult listPostByTopicName(@RequestBody @Validated(TopicPostRequest.ListPostByTopicName.class) TopicPostRequest topicPostRequest) {
         return ApiResultUtil.success(topicPostService.listPostByTopicName(topicPostRequest));
     }
 

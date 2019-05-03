@@ -18,10 +18,10 @@ public class LikesRequest implements Serializable {
     public interface Likes {
     }
 
-    public interface ListLikesByType {
+    public interface ListUserInfoByLikes {
     }
 
-    @NotNull(message = "type_id不能为空。", groups = {Likes.class, ListLikesByType.class})
+    @NotNull(message = "type_id不能为空。", groups = {Likes.class, ListUserInfoByLikes.class})
     @JsonProperty(value = "type_id")
     private Integer typeId;
 
@@ -29,15 +29,15 @@ public class LikesRequest implements Serializable {
     @JsonProperty(value = "likes")
     private Boolean likes;
 
-    @NotNull(message = "likes_type不能为空。", groups = {Likes.class, ListLikesByType.class})
+    @NotNull(message = "likes_type不能为空。", groups = {Likes.class, ListUserInfoByLikes.class})
     @JsonProperty(value = "likes_type")
     private Integer likesType;
 
-    @NotNull(message = "page_num不能为空。", groups = ListLikesByType.class)
+    @NotNull(message = "page_num不能为空。", groups = ListUserInfoByLikes.class)
     @JsonProperty(value = "page_num")
     private Integer pageNum;
 
-    @NotNull(message = "page_size不能为空。", groups = ListLikesByType.class)
+    @NotNull(message = "page_size不能为空。", groups = ListUserInfoByLikes.class)
     @JsonProperty(value = "page_size")
     private Integer pageSize;
 
