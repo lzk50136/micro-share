@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="online.reiam.share.mapper.UserFollowMapper">
+<mapper namespace="com.hslzk.share.mapper.UserFollowMapper">
 
     <select id="selectFollowIdListByUserId" resultType="java.lang.Integer">
         SELECT follow_id
@@ -11,7 +11,7 @@
         ORDER BY modified_time DESC
     </select>
 
-    <resultMap id="userFollowerResponseResultMap" type="online.reiam.share.response.UserFollowerResponse">
+    <resultMap id="userFollowerResponseResultMap" type="com.hslzk.share.response.UserFollowerResponse">
         <result property="eachOther" column="each_other"/>
         <result property="modifiedTime" column="modified_time"/>
         <result property="nickname" column="nickname"/>
@@ -39,7 +39,7 @@
         ORDER BY user_follow.modified_time DESC
     </select>
 
-    <resultMap id="userFollowingResponseResultMap" type="online.reiam.share.response.UserFollowingResponse">
+    <resultMap id="userFollowingResponseResultMap" type="com.hslzk.share.response.UserFollowingResponse">
         <result property="eachOther" column="each_other"/>
         <result property="modifiedTime" column="modified_time"/>
         <result property="nickname" column="nickname"/>

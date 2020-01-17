@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="online.reiam.share.mapper.CommentMapper">
+<mapper namespace="com.hslzk.share.mapper.CommentMapper">
 
-    <resultMap id="commentResponseResultMap" type="online.reiam.share.response.CommentResponse">
+    <resultMap id="commentResponseResultMap" type="com.hslzk.share.response.CommentResponse">
         <id property="id" column="id"/>
         <result property="typeId" column="type_id"/>
         <result property="userId" column="user_id"/>
@@ -13,10 +13,10 @@
         <result property="commentType" column="comment_type"/>
         <result property="modifiedTime" column="modified_time"/>
         <association property="sender" column="user_id"
-                     select="online.reiam.share.mapper.UserInfoMapper.selectUserInfoByUserId">
+                     select="com.hslzk.share.mapper.UserInfoMapper.selectUserInfoByUserId">
         </association>
         <association property="receiver" column="reply_to"
-                     select="online.reiam.share.mapper.UserInfoMapper.selectUserInfoByUserId">
+                     select="com.hslzk.share.mapper.UserInfoMapper.selectUserInfoByUserId">
         </association>
     </resultMap>
 
