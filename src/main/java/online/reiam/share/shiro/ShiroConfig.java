@@ -23,20 +23,20 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
         // 添加ShiroFilter过滤器且命名为jwt
-        Map<String, Filter> filterMap = new HashMap<>();
-        filterMap.put("jwt", new ShiroFilter());
-        shiroFilterFactoryBean.setFilters(filterMap);
+        Map<String, Filter> filters = new HashMap<>();
+        filters.put("jwt", new ShiroFilter());
+        shiroFilterFactoryBean.setFilters(filters);
 
-        Map<String, String> filterRuleMap = new HashMap<>();
+        Map<String, String> filterChainDefinitionMap = new HashMap<>();
         // 所有的请求通过ShiroFilter执行处理
-        filterRuleMap.put("/**", "jwt");
+        filterChainDefinitionMap.put("/**", "jwt");
         // 排除不需要权限的路径，ShiroFilter将不做过滤的操作
-        filterRuleMap.put("/user/sign_up_validate", "anon");
-        filterRuleMap.put("/user/sign_up", "anon");
-        filterRuleMap.put("/user/login", "anon");
-        filterRuleMap.put("/user/reset_password_validate", "anon");
-        filterRuleMap.put("/user/reset_password", "anon");
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterRuleMap);
+        filterChainDefinitionMap.put("/user/sign_up_validate", "anon");
+        filterChainDefinitionMap.put("/user/sign_up", "anon");
+        filterChainDefinitionMap.put("/user/login", "anon");
+        filterChainDefinitionMap.put("/user/reset_password_validate", "anon");
+        filterChainDefinitionMap.put("/user/reset_password", "anon");
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         return shiroFilterFactoryBean;
     }
